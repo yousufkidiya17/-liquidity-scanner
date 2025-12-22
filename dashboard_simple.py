@@ -10,10 +10,10 @@ import os
 from datetime import datetime, timedelta
 
 st.set_page_config(
-    page_title="Liquidity Scanner", 
+    page_title="TAWAQQUL Scanner", 
     layout="wide", 
     initial_sidebar_state="expanded",
-    page_icon="📊"
+    page_icon="🎯"
 )
 
 # ========== SETTINGS ==========
@@ -54,8 +54,8 @@ st.markdown("""
 # Header
 st.markdown("""
 <div class="main-header">
-    <h1>📊 Liquidity Grab Scanner</h1>
-    <p>Multi-Swing Detection • 2, 3 & 5 Candle Swings • BULLISH Only</p>
+    <h1>🎯 TAWAQQUL SCANNER</h1>
+    <p>Smart Money Liquidity Hunter • Multi-Swing Detection • BULLISH Only</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -485,5 +485,5 @@ with st.expander("ℹ️ How It Works"):
     """)
 
 st.markdown("""<div style="text-align: center; color: #6e7681; padding: 20px; font-size: 0.85em;">
-    Liquidity Scanner v4.0 • Multi-Swing Detection • 2, 3 & 5 Candle Swings
+    TAWAQQUL SCANNER v1.0 • by @yousufkidiya17 • Smart Money Concepts
 </div>""", unsafe_allow_html=True)

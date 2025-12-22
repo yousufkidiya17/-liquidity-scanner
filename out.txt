@@ -1,0 +1,115 @@
+
+================================================================================
+   [*] EXTRAORDINARY LIQUIDITY GRAB SCANNER v2.0
+   --------------------------------------------------
+   [+] Features: Volume Spike | Wick Analysis | Signal Scoring
+   [+] Period: 6mo | Timeframes: 1D
+   [+] Cache: ON
+================================================================================
+
+
+================================================================================
+[*] LIQUIDITY GRAB SIGNALS (Last 7 Days)
+================================================================================
+
+   [21-Dec-2025] <<< [TODAY]
+   ----------------------------------------------------------------------------
+   (No signals)
+
+   [20-Dec-2025]
+   ----------------------------------------------------------------------------
+   (No signals)
+
+   [19-Dec-2025]
+   ----------------------------------------------------------------------------
+    * [B] [1D] SHAILY.NS    @ 19-Dec-2025 09:15 IST | Rs.2367.70 | Score: 51/100
+         -> Vol:25[LOW] Wick:100[HIT] Candle:[BEAR] Depth:-0.47% [EQL] [HAMMER]
+
+   [18-Dec-2025]
+   ----------------------------------------------------------------------------
+   ***[A+] [1D] MTARTECH.NS  @ 18-Dec-2025 09:15 IST | Rs.2306.00 | Score: 67/100
+         -> Vol:25[LOW] Wick:95[HIT] Candle:[BEAR->BULL] Depth:0.61% [2-CANDLE]
+    * [B] [1D] DIACABS.NS   @ 18-Dec-2025 09:15 IST | Rs.140.59 | Score: 63/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.72% [EQL]
+    * [B] [1D] GMMPFAUDLR.NS @ 18-Dec-2025 09:15 IST | Rs.1053.80 | Score: 63/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.04% [EQL]
+    * [B] [1D] DYNAMATECH.NS @ 18-Dec-2025 09:15 IST | Rs.9029.50 | Score: 58/100
+         -> Vol:25[LOW] Wick:100[HIT] Candle:[BULL] Depth:-0.57%
+      [C] [1D] IFBIND.NS    @ 18-Dec-2025 09:15 IST | Rs.1552.60 | Score: 45/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BEAR->BULL] Depth:-0.77% [EQL] [2-CANDLE]
+      [C] [1D] SFL.NS       @ 18-Dec-2025 09:15 IST | Rs.572.15 | Score: 45/100
+         -> Vol:25[LOW] Wick:55[OK] Candle:[BULL] Depth:-0.52%
+      [C] [1D] VESUVIUS.NS  @ 18-Dec-2025 09:15 IST | Rs.462.60 | Score: 42/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BULL] Depth:-0.69%
+      [C] [1D] DCBBANK.NS   @ 18-Dec-2025 09:15 IST | Rs.168.02 | Score: 38/100
+         -> Vol:25[LOW] Wick:30[LOW] Candle:[BULL] Depth:-0.18% [EQL]
+      [C] [1D] HCC.NS       @ 18-Dec-2025 09:15 IST | Rs.18.01 | Score: 37/100
+         -> Vol:25[LOW] Wick:30[LOW] Candle:[BULL] Depth:-0.77%
+      [C] [1D] ANUP.NS      @ 18-Dec-2025 09:15 IST | Rs.2154.10 | Score: 36/100
+         -> Vol:25[LOW] Wick:40[LOW] Candle:[BEAR->BULL] Depth:-0.57% [2-CANDLE]
+
+   [17-Dec-2025]
+   ----------------------------------------------------------------------------
+    * [B] [1D] GMMPFAUDLR.NS @ 17-Dec-2025 09:15 IST | Rs.1049.90 | Score: 60/100
+         -> Vol:25[LOW] Wick:95[HIT] Candle:[BEAR->BULL] Depth:-0.05% [EQL] [2-CANDLE]
+      [C] [1D] JKIL.NS      @ 17-Dec-2025 09:15 IST | Rs.551.40 | Score: 48/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.20%
+
+   [16-Dec-2025]
+   ----------------------------------------------------------------------------
+    * [B] [1D] THANGAMAYL.NS @ 16-Dec-2025 09:15 IST | Rs.3214.90 | Score: 58/100
+         -> Vol:25[LOW] Wick:100[HIT] Candle:[BULL] Depth:-0.71%
+    * [B] [1D] SUPRIYA.NS   @ 16-Dec-2025 09:15 IST | Rs.729.10 | Score: 56/100
+         -> Vol:25[LOW] Wick:65[OK] Candle:[BULL] Depth:-0.33% [EQL]
+    * [B] [1D] ACUTAAS.NS   @ 16-Dec-2025 09:15 IST | Rs.1694.40 | Score: 52/100
+         -> Vol:100[FIRE] Wick:15[LOW] Candle:[BULL] Depth:-0.17%
+      [C] [1D] INFIBEAM.NS  @ 16-Dec-2025 09:15 IST | Rs.16.95 | Score: 48/100
+         -> Vol:25[LOW] Wick:65[OK] Candle:[BULL] Depth:-0.48%
+      [C] [1D] MAXESTATES.NS @ 16-Dec-2025 09:15 IST | Rs.450.55 | Score: 43/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BULL] Depth:-0.32% [EQL]
+      [C] [1D] TEAMLEASE.NS @ 16-Dec-2025 09:15 IST | Rs.1603.40 | Score: 43/100
+         -> Vol:25[LOW] Wick:60[OK] Candle:[BEAR->BULL] Depth:-0.57% [EQL] [2-CANDLE]
+      [C] [1D] PARADEEP.NS  @ 16-Dec-2025 09:15 IST | Rs.160.53 | Score: 41/100
+         -> Vol:25[LOW] Wick:15[LOW] Candle:[BULL] Depth:-0.97% [EQL]
+
+   [15-Dec-2025]
+   ----------------------------------------------------------------------------
+    * [B] [1D] SPARC.NS     @ 15-Dec-2025 09:15 IST | Rs.136.42 | Score: 55/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.25%
+      [C] [1D] EPIGRAL.NS   @ 15-Dec-2025 09:15 IST | Rs.1436.50 | Score: 43/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BULL] Depth:-0.11% [EQL]
+      [C] [1D] SHARDAMOTR.NS @ 15-Dec-2025 09:15 IST | Rs.950.00 | Score: 42/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BULL] Depth:-0.96%
+      [C] [1D] ACI.NS       @ 15-Dec-2025 09:15 IST | Rs.501.85 | Score: 37/100
+         -> Vol:10[LOW] Wick:15[LOW] Candle:[BULL] Depth:-0.84% [EQL]
+      [C] [1D] WABAG.NS     @ 15-Dec-2025 09:15 IST | Rs.1252.70 | Score: 36/100
+         -> Vol:25[LOW] Wick:25[LOW] Candle:[BULL] Depth:-0.56%
+
+   [14-Dec-2025]
+   ----------------------------------------------------------------------------
+   (No signals)
+
+================================================================================
+[SUMMARY]
+================================================================================
+   Total Signals: 25
+   [A+] Grade A+ (Score >= 65): 1
+   [B]  Grade B  (Score >= 50): 9
+   [C]  Grade C  (Score >= 35): 15
+   Stocks Scanned: 250
+================================================================================
+
+[SIGNAL QUALITY GUIDE]
+   [A+] Grade (65-100): EXCEPTIONAL - High volume + Strong wick + All confirmations
+   [B]  Grade (50-64):  GOOD - Decent setup, tradeable
+   [C]  Grade (35-49):  WEAK - Missing confirmations, be cautious
+
+[SCORE BREAKDOWN]
+   Volume (Max 25pts): [FIRE]=75%+ [OK]=50%+ [LOW]=Below
+   Wick   (Max 30pts): [HIT]=75%+ [OK]=50%+ [LOW]=Below
+   Candle (Max 15pts): [BULL]=Bullish [BEAR]=Bearish
+   Depth  (Max 15pts): Optimal 0.5-1.5%
+   Context(Max 15pts): [EQL]=Equal Lows, [HAMMER], [DRAGONFLY]
+
+================================================================================
+

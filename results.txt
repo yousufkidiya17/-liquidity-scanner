@@ -1,0 +1,96 @@
+﻿
+================================================================================
+   [*] EXTRAORDINARY LIQUIDITY GRAB SCANNER v2.0
+   --------------------------------------------------
+   [+] Features: Volume Spike | Wick Analysis | Signal Scoring
+   [+] Period: 6mo | Timeframes: 1D
+   [+] Cache: ON
+================================================================================
+
+
+================================================================================
+[*] LIQUIDITY GRAB SIGNALS (Last 7 Days)
+================================================================================
+
+   [21-Dec-2025] <<< [TODAY]
+   ----------------------------------------------------------------------------
+   (No signals)
+
+   [20-Dec-2025]
+   ----------------------------------------------------------------------------
+   (No signals)
+
+   [19-Dec-2025]
+   ----------------------------------------------------------------------------
+   (No signals)
+
+   [18-Dec-2025]
+   ----------------------------------------------------------------------------
+    * [B] [1D] GMMPFAUDLR.NS @ 18-Dec-2025 09:15 IST | Rs.1053.80 | Score: 63/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.04% [EQL]
+      [C] [1D] DCBBANK.NS   @ 18-Dec-2025 09:15 IST | Rs.168.02 | Score: 38/100
+         -> Vol:25[LOW] Wick:30[LOW] Candle:[BULL] Depth:-0.18% [EQL]
+
+   [17-Dec-2025]
+   ----------------------------------------------------------------------------
+      [C] [1D] TEAMLEASE.NS @ 17-Dec-2025 09:15 IST | Rs.1600.90 | Score: 49/100
+         -> Vol:25[LOW] Wick:65[OK] Candle:[BULL] Depth:-0.13% [EQL]
+      [C] [1D] GARFIBRES.NS @ 17-Dec-2025 09:15 IST | Rs.678.35 | Score: 48/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.35%
+      [C] [1D] JKIL.NS      @ 17-Dec-2025 09:15 IST | Rs.551.40 | Score: 48/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.20%
+
+   [16-Dec-2025]
+   ----------------------------------------------------------------------------
+    * [B] [1D] SUPRIYA.NS   @ 16-Dec-2025 09:15 IST | Rs.729.10 | Score: 56/100
+         -> Vol:25[LOW] Wick:65[OK] Candle:[BULL] Depth:-0.33% [EQL]
+    * [B] [1D] ACUTAAS.NS   @ 16-Dec-2025 09:15 IST | Rs.1694.40 | Score: 52/100
+         -> Vol:100[FIRE] Wick:15[LOW] Candle:[BULL] Depth:-0.17%
+      [C] [1D] INFIBEAM.NS  @ 16-Dec-2025 09:15 IST | Rs.16.95 | Score: 48/100
+         -> Vol:25[LOW] Wick:65[OK] Candle:[BULL] Depth:-0.48%
+      [C] [1D] MAXESTATES.NS @ 16-Dec-2025 09:15 IST | Rs.450.55 | Score: 43/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BULL] Depth:-0.32% [EQL]
+
+   [15-Dec-2025]
+   ----------------------------------------------------------------------------
+   ***[A+] [1D] MAXESTATES.NS @ 15-Dec-2025 09:15 IST | Rs.444.65 | Score: 74/100
+         -> Vol:25[LOW] Wick:100[HIT] Candle:[BULL] Depth:0.55% [EQL] [DRAGONFLY]
+   ***[A+] [1D] SFL.NS       @ 15-Dec-2025 09:15 IST | Rs.579.55 | Score: 71/100
+         -> Vol:25[LOW] Wick:65[OK] Candle:[BULL] Depth:0.80% [EQL]
+    * [B] [1D] KITEX.NS     @ 15-Dec-2025 09:15 IST | Rs.197.02 | Score: 60/100
+         -> Vol:25[LOW] Wick:30[LOW] Candle:[BULL] Depth:1.03% [EQL]
+    * [B] [1D] SPARC.NS     @ 15-Dec-2025 09:15 IST | Rs.136.42 | Score: 55/100
+         -> Vol:25[LOW] Wick:90[HIT] Candle:[BULL] Depth:-0.25%
+      [C] [1D] EPIGRAL.NS   @ 15-Dec-2025 09:15 IST | Rs.1436.50 | Score: 43/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BULL] Depth:-0.11% [EQL]
+      [C] [1D] ENTERO.NS    @ 15-Dec-2025 09:15 IST | Rs.1001.60 | Score: 42/100
+         -> Vol:25[LOW] Wick:45[LOW] Candle:[BULL] Depth:-0.24%
+
+   [14-Dec-2025]
+   ----------------------------------------------------------------------------
+   (No signals)
+
+================================================================================
+[SUMMARY]
+================================================================================
+   Total Signals: 15
+   [A+] Grade A+ (Score >= 65): 2
+   [B]  Grade B  (Score >= 50): 5
+   [C]  Grade C  (Score >= 35): 8
+   Stocks Scanned: 250
+================================================================================
+
+[SIGNAL QUALITY GUIDE]
+   [A+] Grade (65-100): EXCEPTIONAL - High volume + Strong wick + All confirmations
+   [B]  Grade (50-64):  GOOD - Decent setup, tradeable
+   [C]  Grade (35-49):  WEAK - Missing confirmations, be cautious
+
+[SCORE BREAKDOWN]
+   Volume (Max 25pts): [FIRE]=75%+ [OK]=50%+ [LOW]=Below
+   Wick   (Max 30pts): [HIT]=75%+ [OK]=50%+ [LOW]=Below
+   Candle (Max 15pts): [BULL]=Bullish [BEAR]=Bearish
+   Depth  (Max 15pts): Optimal 0.5-1.5%
+   Context(Max 15pts): [EQL]=Equal Lows, [HAMMER], [DRAGONFLY]
+
+================================================================================
+

@@ -1,0 +1,125 @@
+═══════════════════════════════════════════════════════════════
+        LIQUIDITY GRAB SCANNER - DAILY USAGE GUIDE
+═══════════════════════════════════════════════════════════════
+
+📌 QUICK START (ROZ SUBAH):
+═══════════════════════════════════════════════════════════════
+
+Option 1: ONE-CLICK (RECOMMENDED)
+────────────────────────────────
+1. Double-click: "RUN_DAILY.bat"
+   ✓ Cache automatically download hoga
+   ✓ Dashboard automatically open hoga
+   ✓ Signals dekhne padenge 30 min wait karke
+
+Option 2: Manual Steps
+────────────────────────────────
+1. Open PowerShell/Terminal
+2. cd "c:\liquidity scanner"
+3. python build_all_caches.py        (Terminal 1)
+4. (Alag terminal me)
+5. streamlit run dashboard.py        (Terminal 2)
+6. http://localhost:8501 open karo
+
+
+⚙️ WORKFLOW:
+═══════════════════════════════════════════════════════════════
+
+STEP 1: LAUNCH
+  → RUN_DAILY.bat double-click karo
+
+STEP 2: CACHE BUILD (Background)
+  → 30-40 minutes
+  → Sare 2300+ stocks download hoga
+  → Cache files create hoga
+
+STEP 3: DASHBOARD READY
+  → Browser: http://localhost:8501
+  → Left sidebar: Index/Sector select kar
+  → "START SCAN" click kar
+  → Real-time signals dekh!
+
+STEP 4: SIGNALS CHECK
+  → Date-wise signals sorted
+  → Depth % dekh
+  → Stock prices dekh
+  → Trade decisions lo!
+
+
+📊 DASHBOARD FEATURES:
+═══════════════════════════════════════════════════════════════
+
+✓ INDEX MODE
+  • NIFTY50 (51 stocks)
+  • NIFTY500 (501 stocks)
+  • MICROCAP250 (250 stocks)
+  • + 7 more indices
+  
+✓ SECTOR MODE
+  • Auto, IT, Pharma, Defence
+  • Energy, Healthcare, FMCG
+  • + 12 more sectors
+
+✓ CUSTOM MODE
+  • Apni custom CSV upload kar
+  • Any stock list scan kar
+
+
+💾 CACHE MANAGEMENT:
+═══════════════════════════════════════════════════════════════
+
+FIRST TIME:
+  → Run build_all_caches.py (Complete 2300+ stocks)
+  → Takes: 40-60 minutes
+
+DAILY:
+  → Same script runs automatically
+  → Updates cache with latest data
+  → Overnight rebuild (recommended)
+
+FORCE REFRESH:
+  → Stop dashboard
+  → python build_all_caches.py
+  → Restart dashboard
+
+
+🎯 TYPICAL DAILY ROUTINE:
+═══════════════════════════════════════════════════════════════
+
+8:00 AM    → Double-click RUN_DAILY.bat
+8:05 AM    → Dashboard opens
+8:40 AM    → Cache complete, signals ready
+8:45 AM    → Select SECTOR_PHARMA
+8:50 AM    → Check signals
+9:15 AM    → Take trading decisions
+           → Market opens!
+
+
+⚠️ TROUBLESHOOTING:
+═══════════════════════════════════════════════════════════════
+
+Q: Cache build bahut slow?
+A: Haan, yfinance rate-limited hai. Raat ko build karo (OFF-MARKET)
+
+Q: Dashboard nahi open ho raha?
+A: Try: http://localhost:8501 manually in browser
+
+Q: No signals showing?
+A: Cache abhi build ho raha hoga. 30 min wait karo
+
+Q: yfinance rate limited?
+A: Automatic retry logic hai. 1-2 hours wait karo
+
+
+📝 NOTES:
+═══════════════════════════════════════════════════════════════
+
+✓ Cache local file system me store (c:\liquidity scanner\data_cache)
+✓ Internet required (yfinance download ke liye)
+✓ System resources: 2GB RAM, 500MB disk space
+✓ Run time: 40-60 min (first time), 20-30 min (daily)
+
+
+═══════════════════════════════════════════════════════════════
+Ready to make money? Start now! 💰
+═══════════════════════════════════════════════════════════════
