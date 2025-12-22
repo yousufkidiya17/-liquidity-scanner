@@ -69,7 +69,8 @@ if logo_b64:
         <img src="data:image/png;base64,{logo_b64}" style="height: 70px; filter: invert(1);">
         <div>
             <h1 style="margin: 0;">TAWAQQUL SCANNER</h1>
-            <p style="margin: 5px 0 0 0;">Smart Money Liquidity Hunter • Multi-Swing Detection • BULLISH Only</p>
+            <p style="margin: 8px 0 0 0; font-size: 1.3em; font-family: 'Traditional Arabic', 'Scheherazade', serif; direction: rtl; letter-spacing: 2px; color: #ffd700;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+            <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.9; letter-spacing: 1px;">Institutional Liquidity Detection</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -77,7 +78,8 @@ else:
     st.markdown("""
     <div class="main-header">
         <h1>🎯 TAWAQQUL SCANNER</h1>
-        <p>Smart Money Liquidity Hunter • Multi-Swing Detection • BULLISH Only</p>
+        <p style="font-size: 1.3em; font-family: 'Traditional Arabic', 'Scheherazade', serif; direction: rtl; letter-spacing: 2px; color: #ffd700;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+        <p style="font-size: 0.85em; opacity: 0.9;">Institutional Liquidity Detection</p>
     </div>
     """, unsafe_allow_html=True)
 
