@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Liquidity Grab Scanner Dashboard - LuxAlgo Style
-Proper swing detection with scoring system
+Liquidity Grab Scanner Dashboard - Multi Swing Detection
+Detects 2-candle, 3-candle, and 5-candle swing lows
 """
 import streamlit as st
 import pandas as pd
@@ -16,11 +16,11 @@ st.set_page_config(
     page_icon="📊"
 )
 
-# ========== LUXALGO SETTINGS ==========
+# ========== SETTINGS ==========
 PERIOD = "6mo"
-SWING_LENGTH = 5  # 5 bars left + 5 bars right (like LuxAlgo)
-MIN_WICK_PERCENT = 30  # Minimum 30% wick of total candle
-MIN_DEPTH_PERCENT = 0.1  # Minimum 0.1% below swing
+SWING_LENGTHS = [2, 3, 5]  # Multiple swing lengths - 2, 3, and 5 candles
+MIN_WICK_PERCENT = 25  # Minimum wick percentage
+MIN_DEPTH_PERCENT = 0.1  # Minimum depth below swing
 
 # Simple Clean CSS
 st.markdown("""
@@ -44,17 +44,18 @@ st.markdown("""
         margin: 5px 0;
     }
     .metric-card h3 { color: #8b949e; font-size: 0.85em; margin: 0; font-weight: 400; }
-    .metric-card .value { color: #ffffff; font-size: 1.8em; font-weight: 600; margin: 5px 0 0 0; }
-    .signal-good { background: rgba(0,200,83,0.1); border-left: 3px solid #00c853; padding: 10px; border-radius: 5px; margin: 5px 0; }
-    .signal-weak { background: rgba(255,193,7,0.1); border-left: 3px solid #ffc107; padding: 10px; border-radius: 5px; margin: 5px 0; }
+    .metric-card .value { color: #ffffff; font-size: 1.5em; font-weight: 600; margin: 5px 0 0 0; }
+    .signal-good { background: rgba(0,200,83,0.15); border-left: 4px solid #00c853; padding: 12px; border-radius: 5px; margin: 8px 0; }
+    .signal-medium { background: rgba(255,193,7,0.15); border-left: 4px solid #ffc107; padding: 12px; border-radius: 5px; margin: 8px 0; }
+    .signal-weak { background: rgba(255,82,82,0.1); border-left: 4px solid #ff5252; padding: 12px; border-radius: 5px; margin: 8px 0; }
 </style>
 """, unsafe_allow_html=True)
 
 # Header
 st.markdown("""
 <div class="main-header">
-    <h1>📊 Liquidity Grab Scanner (LuxAlgo Style)</h1>
-    <p>BULLISH Swing Low Sweeps Only • Proper Detection</p>
+    <h1>📊 Liquidity Grab Scanner</h1>
+    <p>Multi-Swing Detection • 2, 3 & 5 Candle Swings • BULLISH Only</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -72,45 +73,53 @@ def download_data(ticker):
     except:
         return pd.DataFrame()
 
-def detect_pivot_lows(df, length=5):
+def detect_pivot_lows_multi(df, lengths=[2, 3, 5]):
     """
-    LuxAlgo style pivot low detection
-    A pivot low needs 'length' bars on left AND right to be higher
+    Detect pivot lows with MULTIPLE swing lengths
+    - 2 candle swing = recent/small swings
+    - 3 candle swing = medium swings  
+    - 5 candle swing = major swings
     """
-    pivot_lows = []
+    all_pivots = []
+    seen_indices = set()
     
-    for i in range(length, len(df) - length):
-        current_low = df['Low'].iloc[i]
-        is_pivot = True
-        
-        # Check left side
-        for j in range(1, length + 1):
-            if df['Low'].iloc[i - j] <= current_low:
-                is_pivot = False
-                break
-        
-        # Check right side
-        if is_pivot:
+    for length in lengths:
+        for i in range(length, len(df) - length):
+            if i in seen_indices:
+                continue
+                
+            current_low = df['Low'].iloc[i]
+            is_pivot = True
+            
+            # Check left side
             for j in range(1, length + 1):
-                if df['Low'].iloc[i + j] <= current_low:
+                if df['Low'].iloc[i - j] <= current_low:
                     is_pivot = False
                     break
-        
-        if is_pivot:
-            pivot_lows.append({
-                'index': i,
-                'date': df.index[i],
-                'price': current_low
-            })
+            
+            # Check right side
+            if is_pivot:
+                for j in range(1, length + 1):
+                    if df['Low'].iloc[i + j] <= current_low:
+                        is_pivot = False
+                        break
+            
+            if is_pivot:
+                all_pivots.append({
+                    'index': i,
+                    'date': df.index[i],
+                    'price': current_low,
+                    'swing_type': length
+                })
+                seen_indices.add(i)
     
-    return pivot_lows
+    return all_pivots
 
-def luxalgo_sweep_detection(df, pivot_lows):
+def detect_liquidity_sweep(df, pivot_lows):
     """
-    LuxAlgo style sweep detection:
-    - Low goes BELOW swing low (sweep)
+    Detect liquidity sweep:
+    - Low goes BELOW swing low (sweep/hunt)
     - Close stays ABOVE swing low (rejection = BULLISH)
-    - Must have significant wick
     """
     signals = []
     
@@ -128,7 +137,7 @@ def luxalgo_sweep_detection(df, pivot_lows):
         if candle_range == 0:
             continue
             
-        # Lower wick (for bullish - wick below body)
+        # Lower wick
         body_low = min(candle_open, candle_close)
         lower_wick = body_low - candle_low
         wick_percent = (lower_wick / candle_range) * 100
@@ -137,6 +146,7 @@ def luxalgo_sweep_detection(df, pivot_lows):
         for pivot in pivot_lows:
             pivot_idx = pivot['index']
             swing_low = pivot['price']
+            swing_type = pivot['swing_type']
             
             # Pivot must be BEFORE current candle
             if pivot_idx >= i:
@@ -147,10 +157,6 @@ def luxalgo_sweep_detection(df, pivot_lows):
                 continue
             
             # === BULLISH SWEEP CONDITIONS ===
-            # 1. Low must go BELOW swing low (liquidity grab)
-            # 2. Close must be ABOVE swing low (rejection/reversal)
-            # 3. Must have decent wick
-            
             if candle_low < swing_low and candle_close > swing_low:
                 # Calculate depth
                 depth_points = swing_low - candle_low
@@ -165,15 +171,16 @@ def luxalgo_sweep_detection(df, pivot_lows):
                     continue
                 
                 # Calculate score
-                score = calculate_score(wick_percent, depth_percent, candle_close, swing_low, candle_range)
+                score = calculate_score(wick_percent, depth_percent, candle_close, swing_low, swing_type)
                 
-                # Determine if bullish candle
+                # Bullish candle bonus
                 is_bullish = candle_close > candle_open
                 
                 signals.append({
                     'date': current_date,
                     'index': i,
                     'swing_low': swing_low,
+                    'swing_type': swing_type,
                     'candle_low': candle_low,
                     'close': candle_close,
                     'depth_percent': depth_percent,
@@ -186,16 +193,16 @@ def luxalgo_sweep_detection(df, pivot_lows):
     
     return signals
 
-def calculate_score(wick_pct, depth_pct, close, swing, candle_range):
+def calculate_score(wick_pct, depth_pct, close, swing, swing_type):
     """Calculate signal quality score (0-100)"""
     score = 0
     
     # Wick score (max 30)
-    if wick_pct >= 60:
+    if wick_pct >= 55:
         score += 30
-    elif wick_pct >= 45:
+    elif wick_pct >= 40:
         score += 22
-    elif wick_pct >= 30:
+    elif wick_pct >= 25:
         score += 15
     else:
         score += 8
@@ -219,8 +226,14 @@ def calculate_score(wick_pct, depth_pct, close, swing, candle_range):
     else:
         score += 5
     
-    # Candle structure (max 20)
-    score += 15  # Base for valid pattern
+    # Swing type bonus (max 20)
+    # Bigger swing = more significant
+    if swing_type >= 5:
+        score += 20  # Major swing
+    elif swing_type >= 3:
+        score += 15  # Medium swing
+    else:
+        score += 10  # Small swing
     
     return min(score, 100)
 
@@ -234,10 +247,19 @@ def get_grade(score):
     else:
         return "D"
 
+def get_swing_label(swing_type):
+    if swing_type >= 5:
+        return "Major"
+    elif swing_type >= 3:
+        return "Medium"
+    else:
+        return "Minor"
+
 # ========== SIDEBAR ==========
 with st.sidebar:
     st.markdown("### ⚙️ Scan Settings")
-    st.success("🌐 Live Data | LuxAlgo Logic")
+    st.success("🌐 Multi-Swing Detection")
+    st.caption("Detects 2, 3 & 5 candle swings")
     st.markdown("---")
     
     scan_type = st.radio("📁 Select Scan Type", ["INDEX", "SECTOR"], horizontal=True)
@@ -272,13 +294,13 @@ with st.sidebar:
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.markdown("""<div class="metric-card"><h3>Logic</h3><div class="value">LuxAlgo</div></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class="metric-card"><h3>Swing Types</h3><div class="value">2, 3, 5</div></div>""", unsafe_allow_html=True)
 with col2:
-    st.markdown(f"""<div class="metric-card"><h3>Swing Length</h3><div class="value">{SWING_LENGTH}</div></div>""", unsafe_allow_html=True)
-with col3:
     st.markdown(f"""<div class="metric-card"><h3>Min Wick</h3><div class="value">{MIN_WICK_PERCENT}%</div></div>""", unsafe_allow_html=True)
-with col4:
+with col3:
     st.markdown(f"""<div class="metric-card"><h3>Min Depth</h3><div class="value">{MIN_DEPTH_PERCENT}%</div></div>""", unsafe_allow_html=True)
+with col4:
+    st.markdown(f"""<div class="metric-card"><h3>Period</h3><div class="value">{PERIOD}</div></div>""", unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -290,7 +312,7 @@ if scan_clicked:
         progress = st.progress(0)
         status = st.empty()
         
-        all_signals = {}
+        all_signals = []
         total = len(selected_files)
         cutoff_date = datetime.now() - timedelta(days=days_filter)
         
@@ -302,7 +324,6 @@ if scan_clicked:
                 tickers_df = pd.read_csv(csv_file, header=None)
                 tickers = tickers_df.iloc[:, 0].astype(str).str.strip().tolist()
                 
-                file_signals = []
                 ticker_progress = st.empty()
                 
                 for t_idx, ticker in enumerate(tickers):
@@ -312,9 +333,9 @@ if scan_clicked:
                     if df.empty or len(df) < 20:
                         continue
                     
-                    # LuxAlgo detection
-                    pivot_lows = detect_pivot_lows(df, SWING_LENGTH)
-                    signals = luxalgo_sweep_detection(df, pivot_lows)
+                    # Multi-swing detection
+                    pivot_lows = detect_pivot_lows_multi(df, SWING_LENGTHS)
+                    signals = detect_liquidity_sweep(df, pivot_lows)
                     
                     # Filter signals
                     for sig in signals:
@@ -325,21 +346,11 @@ if scan_clicked:
                             sig_date = sig_date.replace(tzinfo=None)
                         
                         if sig_date >= cutoff_date and sig['score'] >= min_score:
-                            file_signals.append({
-                                'ticker': ticker,
-                                'date': sig['date'],
-                                'swing': sig['swing_low'],
-                                'depth': sig['depth_percent'],
-                                'wick': sig['wick_percent'],
-                                'score': sig['score'],
-                                'grade': sig['grade'],
-                                'close': sig['close']
-                            })
+                            sig['ticker'] = ticker
+                            sig['file'] = file_name
+                            all_signals.append(sig)
                 
                 ticker_progress.empty()
-                
-                if file_signals:
-                    all_signals[file_name] = file_signals
                     
             except Exception as e:
                 st.warning(f"Error in {file_name}: {str(e)[:40]}")
@@ -350,68 +361,96 @@ if scan_clicked:
         status.empty()
         
         # ========== RESULTS ==========
-        st.markdown("## 📋 Scan Results (BULLISH Sweeps Only)")
+        st.markdown("## 📋 Scan Results (BULLISH Sweeps)")
         
         if not all_signals:
             st.info(f"ℹ️ No quality signals found in last {days_filter} days with score >= {min_score}")
         else:
-            total_sigs = sum(len(s) for s in all_signals.values())
+            # Sort by score
+            all_signals = sorted(all_signals, key=lambda x: x['score'], reverse=True)
             
-            col1, col2, col3 = st.columns(3)
-            col1.metric("📊 Total Signals", total_sigs)
-            col2.metric("📈 Stocks with Signals", sum(len(set(s['ticker'] for s in sigs)) for sigs in all_signals.values()))
-            col3.metric("📁 Files with Signals", len(all_signals))
+            # Summary
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("📊 Total Signals", len(all_signals))
+            col2.metric("🏆 A+ Signals", len([s for s in all_signals if s['grade'] == 'A+']))
+            col3.metric("✅ B Signals", len([s for s in all_signals if s['grade'] == 'B']))
+            col4.metric("📈 Stocks", len(set(s['ticker'] for s in all_signals)))
             
             st.markdown("---")
             
-            # Sort by score
-            all_sorted = []
-            for file_name, sigs in all_signals.items():
-                for s in sigs:
-                    s['file'] = file_name
-                    all_sorted.append(s)
-            
-            all_sorted = sorted(all_sorted, key=lambda x: x['score'], reverse=True)
-            
             # Grade A+ signals
-            a_plus = [s for s in all_sorted if s['grade'] == 'A+']
+            a_plus = [s for s in all_signals if s['grade'] == 'A+']
             if a_plus:
-                st.markdown("### 🏆 Grade A+ Signals (Score ≥ 70)")
+                st.markdown("### 🏆 Grade A+ (Score ≥ 70) - BEST SETUPS")
                 for s in a_plus:
                     date_str = s['date'].strftime('%d-%b') if hasattr(s['date'], 'strftime') else str(s['date'])
+                    swing_label = get_swing_label(s['swing_type'])
                     st.markdown(f"""
                     <div class="signal-good">
-                        <b>{s['ticker']}</b> | {date_str} | Score: <b>{s['score']}/100</b> | 
-                        Swing: ₹{s['swing']:.2f} | Depth: {s['depth']:.2f}% | Wick: {s['wick']:.0f}%
+                        <b style="font-size:1.2em;">{s['ticker']}</b> &nbsp;|&nbsp; {date_str} &nbsp;|&nbsp; 
+                        Score: <b>{s['score']}/100</b> &nbsp;|&nbsp;
+                        Swing: ₹{s['swing_low']:.2f} ({swing_label}) &nbsp;|&nbsp;
+                        Depth: {s['depth_percent']:.2f}% &nbsp;|&nbsp;
+                        Wick: {s['wick_percent']:.0f}%
                     </div>
                     """, unsafe_allow_html=True)
             
             # Grade B signals
-            b_grade = [s for s in all_sorted if s['grade'] == 'B']
+            b_grade = [s for s in all_signals if s['grade'] == 'B']
             if b_grade:
-                st.markdown("### ✅ Grade B Signals (Score 55-69)")
+                st.markdown("### ✅ Grade B (Score 55-69) - GOOD SETUPS")
                 for s in b_grade:
                     date_str = s['date'].strftime('%d-%b') if hasattr(s['date'], 'strftime') else str(s['date'])
+                    swing_label = get_swing_label(s['swing_type'])
                     st.markdown(f"""
-                    <div class="signal-weak">
-                        <b>{s['ticker']}</b> | {date_str} | Score: <b>{s['score']}/100</b> | 
-                        Swing: ₹{s['swing']:.2f} | Depth: {s['depth']:.2f}% | Wick: {s['wick']:.0f}%
+                    <div class="signal-medium">
+                        <b style="font-size:1.1em;">{s['ticker']}</b> &nbsp;|&nbsp; {date_str} &nbsp;|&nbsp; 
+                        Score: <b>{s['score']}/100</b> &nbsp;|&nbsp;
+                        Swing: ₹{s['swing_low']:.2f} ({swing_label}) &nbsp;|&nbsp;
+                        Depth: {s['depth_percent']:.2f}% &nbsp;|&nbsp;
+                        Wick: {s['wick_percent']:.0f}%
                     </div>
                     """, unsafe_allow_html=True)
             
-            # Lower grades in table
-            lower = [s for s in all_sorted if s['grade'] in ['C', 'D']]
+            # Grade C/D signals
+            lower = [s for s in all_signals if s['grade'] in ['C', 'D']]
             if lower:
-                st.markdown("### 📋 Other Signals")
-                df_display = pd.DataFrame(lower)[['ticker', 'date', 'score', 'grade', 'swing', 'depth', 'wick']]
-                df_display.columns = ['Stock', 'Date', 'Score', 'Grade', 'Swing', 'Depth%', 'Wick%']
-                st.dataframe(df_display, use_container_width=True, hide_index=True)
+                st.markdown("### 📋 Other Signals (Score < 55)")
+                rows = []
+                for s in lower:
+                    date_str = s['date'].strftime('%d-%b') if hasattr(s['date'], 'strftime') else str(s['date'])
+                    rows.append({
+                        'Stock': s['ticker'],
+                        'Date': date_str,
+                        'Score': s['score'],
+                        'Grade': s['grade'],
+                        'Swing': f"₹{s['swing_low']:.2f}",
+                        'Type': get_swing_label(s['swing_type']),
+                        'Depth%': f"{s['depth_percent']:.2f}",
+                        'Wick%': f"{s['wick_percent']:.0f}"
+                    })
+                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
             
             # Export
             st.markdown("---")
             st.markdown("### 💾 Export")
             
-            df_export = pd.DataFrame(all_sorted)
+            export_rows = []
+            for s in all_signals:
+                date_str = s['date'].strftime('%Y-%m-%d') if hasattr(s['date'], 'strftime') else str(s['date'])
+                export_rows.append({
+                    'Stock': s['ticker'],
+                    'Date': date_str,
+                    'Score': s['score'],
+                    'Grade': s['grade'],
+                    'Swing_Low': s['swing_low'],
+                    'Swing_Type': get_swing_label(s['swing_type']),
+                    'Depth_Percent': s['depth_percent'],
+                    'Wick_Percent': s['wick_percent'],
+                    'Close': s['close']
+                })
+            
+            df_export = pd.DataFrame(export_rows)
             csv_data = df_export.to_csv(index=False)
             st.download_button("📥 Download CSV", csv_data, "liquidity_signals.csv", "text/csv")
 
@@ -419,17 +458,32 @@ if scan_clicked:
 st.markdown("---")
 with st.expander("ℹ️ How It Works"):
     st.markdown("""
-    **LuxAlgo Style Liquidity Sweep Detection:**
+    **Multi-Swing Liquidity Sweep Detection:**
     
-    1. **Find Swing Lows** - Price must be lowest for 5 bars on BOTH sides
-    2. **Detect Sweep** - Wick goes BELOW swing low (liquidity grabbed)
-    3. **Confirm Reversal** - Close must be ABOVE swing low (bullish rejection)
-    4. **Quality Filter** - Minimum 30% wick, minimum 0.1% depth
-    5. **Score** - Based on wick size, depth, close position (0-100)
+    🔹 **Swing Detection:**
+    - 2-candle swing = Minor/Recent swings
+    - 3-candle swing = Medium swings
+    - 5-candle swing = Major swings
     
-    **Grades:** A+ (≥70) | B (55-69) | C (40-54) | D (<40)
+    🔹 **Sweep Conditions:**
+    - Wick goes BELOW swing low (liquidity grabbed)
+    - Close stays ABOVE swing low (bullish rejection)
+    - Minimum 25% wick required
+    - Minimum 0.1% depth required
+    
+    🔹 **Scoring (0-100):**
+    - Wick size: up to 30 pts
+    - Depth: up to 25 pts  
+    - Close position: up to 25 pts
+    - Swing significance: up to 20 pts
+    
+    🔹 **Grades:**
+    - A+ (≥70): Best setups - High conviction
+    - B (55-69): Good setups - Worth watching
+    - C (40-54): Weak setups - Risky
+    - D (<40): Avoid
     """)
 
 st.markdown("""<div style="text-align: center; color: #6e7681; padding: 20px; font-size: 0.85em;">
-    Liquidity Scanner v3.0 • LuxAlgo Logic • BULLISH Only
+    Liquidity Scanner v4.0 • Multi-Swing Detection • 2, 3 & 5 Candle Swings
 </div>""", unsafe_allow_html=True)
