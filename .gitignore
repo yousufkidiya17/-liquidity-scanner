@@ -1,0 +1,18 @@
+# Ignore cache folders
+data_cache/
+data_cache_backup/
+data_cache_temp/
+__pycache__/
+*.pyc
+
+# Ignore batch files (local only)
+*.bat
+
+# Ignore test files
+*_test*.py
+smc_enhanced*.py
+smc_library*.py
+
+# Keep important files
+!requirements.txt
+!README.md
