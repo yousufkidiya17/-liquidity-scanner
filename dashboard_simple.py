@@ -313,18 +313,6 @@ with st.sidebar:
     scan_clicked = st.button("🚀 Start Scan", use_container_width=True, type="primary")
 
 # ========== MAIN CONTENT ==========
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    st.markdown("""<div class="metric-card"><h3>Swing Types</h3><div class="value">2, 3, 5</div></div>""", unsafe_allow_html=True)
-with col2:
-    st.markdown(f"""<div class="metric-card"><h3>Min Wick</h3><div class="value">{MIN_WICK_PERCENT}%</div></div>""", unsafe_allow_html=True)
-with col3:
-    st.markdown(f"""<div class="metric-card"><h3>Min Depth</h3><div class="value">{MIN_DEPTH_PERCENT}%</div></div>""", unsafe_allow_html=True)
-with col4:
-    st.markdown(f"""<div class="metric-card"><h3>Period</h3><div class="value">{PERIOD}</div></div>""", unsafe_allow_html=True)
-
-st.markdown("---")
 
 # ========== SCAN ==========
 if scan_clicked:
