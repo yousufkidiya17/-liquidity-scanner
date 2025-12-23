@@ -13,12 +13,20 @@ import yfinance as yf
 import os
 from datetime import datetime, timedelta
 import base64
+from PIL import Image
+
+# Load favicon
+favicon_path = os.path.join(os.path.dirname(__file__), "logo.png")
+if os.path.exists(favicon_path):
+    favicon = Image.open(favicon_path)
+else:
+    favicon = "🎯"
 
 st.set_page_config(
     page_title="TAWAQQUL Scanner", 
     layout="wide", 
     initial_sidebar_state="expanded",
-    page_icon="🎯"
+    page_icon=favicon
 )
 
 # ========== SETTINGS ==========
