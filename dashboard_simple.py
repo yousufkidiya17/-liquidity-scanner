@@ -41,6 +41,10 @@ st.markdown("""
         0%, 100% { opacity: 0.8; }
         50% { opacity: 1; }
     }
+    @keyframes logoPulse {
+        0%, 100% { transform: scale(1); filter: invert(1) drop-shadow(0 0 5px rgba(255,215,0,0.3)); }
+        50% { transform: scale(1.05); filter: invert(1) drop-shadow(0 0 15px rgba(255,215,0,0.6)); }
+    }
     
     .main-header {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
@@ -123,7 +127,7 @@ logo_b64 = get_logo_base64()
 if logo_b64:
     st.markdown(f"""
     <div class="main-header" style="display: flex; align-items: center; gap: 25px;">
-        <img src="data:image/png;base64,{logo_b64}" style="height: 80px; filter: invert(1);">
+        <img src="data:image/png;base64,{logo_b64}" style="height: 80px; animation: logoPulse 3s ease-in-out infinite;">
         <div>
             <h1>TAWAQQUL SCANNER</h1>
             <p class="arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
