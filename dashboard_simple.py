@@ -14,6 +14,14 @@ import os
 from datetime import datetime, timedelta
 import base64
 from PIL import Image
+import hashlib
+
+# ========== USER DATABASE (Add your users here) ==========
+USERS = {
+    "admin": hashlib.sha256("admin123".encode()).hexdigest(),
+    "yousuf": hashlib.sha256("tawaqqul".encode()).hexdigest(),
+    "guest": hashlib.sha256("guest123".encode()).hexdigest(),
+}
 
 # Load favicon
 favicon_path = os.path.join(os.path.dirname(__file__), "logo.png")
@@ -28,6 +36,146 @@ st.set_page_config(
     initial_sidebar_state="expanded",
     page_icon=favicon
 )
+
+# ========== LOGIN STYLES ==========
+st.markdown("""
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 40px;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+    }
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .login-header h1 {
+        color: #ffffff;
+        font-size: 2em;
+        margin: 10px 0;
+    }
+    .login-header .arabic {
+        color: #ffd700;
+        font-size: 1.3em;
+        direction: rtl;
+    }
+    .login-logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: #000;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: logoGlow 3s ease-in-out infinite;
+    }
+    @keyframes logoGlow {
+        0%, 100% { box-shadow: 0 0 10px #ffd700, 0 0 20px rgba(255,215,0,0.3); }
+        50% { box-shadow: 0 0 20px #ffd700, 0 0 40px rgba(255,215,0,0.5); }
+    }
+    .welcome-text {
+        text-align: center;
+        color: #00ff88;
+        font-size: 1.1em;
+        margin-top: 20px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ========== AUTHENTICATION FUNCTIONS ==========
+def check_password(username, password):
+    """Check if username and password match"""
+    if username in USERS:
+        hashed = hashlib.sha256(password.encode()).hexdigest()
+        return USERS[username] == hashed
+    return False
+
+def get_logo_base64():
+    logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
+    if os.path.exists(logo_path):
+        with open(logo_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return None
+
+# ========== LOGIN PAGE ==========
+def show_login_page():
+    logo_b64 = get_logo_base64()
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("""
+        <div style="text-align: center; margin-top: 50px;">
+        """, unsafe_allow_html=True)
+        
+        if logo_b64:
+            st.markdown(f"""
+            <div style="text-align: center;">
+                <div class="login-logo">
+                    <img src="data:image/png;base64,{logo_b64}" style="width: 50px; filter: invert(1);">
+                </div>
+                <h1 style="color: #ffffff; margin: 10px 0;">🔐 TAWAQQUL SCANNER</h1>
+                <p style="color: #ffd700; font-size: 1.2em; direction: rtl;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                <p style="color: #a0c4e8;">Premium Liquidity Scanner</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        with st.form("login_form"):
+            st.markdown("### 👤 Login to Continue")
+            username = st.text_input("Username", placeholder="Enter username")
+            password = st.text_input("Password", type="password", placeholder="Enter password")
+            
+            col_a, col_b = st.columns(2)
+            with col_a:
+                submit = st.form_submit_button("🚀 Login", use_container_width=True, type="primary")
+            with col_b:
+                if st.form_submit_button("👁️ Demo", use_container_width=True):
+                    st.session_state['authenticated'] = True
+                    st.session_state['username'] = "Demo User"
+                    st.rerun()
+            
+            if submit:
+                if check_password(username, password):
+                    st.session_state['authenticated'] = True
+                    st.session_state['username'] = username
+                    st.success(f"✅ Welcome {username}!")
+                    st.rerun()
+                else:
+                    st.error("❌ Invalid username or password!")
+        
+        st.markdown("""
+        <div style="text-align: center; margin-top: 30px; color: #6e7681; font-size: 0.85em;">
+            <p>📧 Contact: @yousufkidiya17</p>
+            <p>🔒 Secure Login System</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+# ========== LOGOUT BUTTON ==========
+def show_logout_button():
+    with st.sidebar:
+        st.markdown(f"**👤 Welcome, {st.session_state.get('username', 'User')}!**")
+        if st.button("🚪 Logout", use_container_width=True):
+            st.session_state['authenticated'] = False
+            st.session_state['username'] = None
+            st.rerun()
+        st.markdown("---")
+
+# ========== CHECK AUTHENTICATION ==========
+if 'authenticated' not in st.session_state:
+    st.session_state['authenticated'] = False
+
+if not st.session_state['authenticated']:
+    show_login_page()
+    st.stop()
+
+# ========== SHOW LOGOUT IN SIDEBAR ==========
+show_logout_button()
 
 # ========== SETTINGS ==========
 PERIOD = "6mo"
@@ -183,13 +331,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ========== HEADER WITH ANIMATION ==========
-def get_logo_base64():
-    logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
-    if os.path.exists(logo_path):
-        with open(logo_path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    return None
-
 logo_b64 = get_logo_base64()
 if logo_b64:
     st.markdown(f"""
