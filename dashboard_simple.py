@@ -29,6 +29,57 @@ st.set_page_config(
     page_icon=favicon
 )
 
+# ========== AUTO-OPEN SIDEBAR ON MOBILE ==========
+st.markdown("""
+<script>
+    // Auto-open sidebar on mobile devices
+    function openSidebarOnMobile() {
+        if (window.innerWidth <= 768) {
+            const sidebarButton = window.parent.document.querySelector('[data-testid="collapsedControl"]');
+            if (sidebarButton) {
+                sidebarButton.click();
+            }
+        }
+    }
+    // Run on page load
+    setTimeout(openSidebarOnMobile, 500);
+</script>
+""", unsafe_allow_html=True)
+
+# Also use CSS to make sidebar more visible on mobile
+st.markdown("""
+<style>
+    /* Mobile sidebar improvements */
+    @media (max-width: 768px) {
+        [data-testid="stSidebar"] {
+            min-width: 280px !important;
+            width: 280px !important;
+        }
+        [data-testid="stSidebar"][aria-expanded="true"] {
+            display: block !important;
+            position: fixed !important;
+            z-index: 999 !important;
+        }
+        .main-header {
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 15px !important;
+        }
+        .main-header h1 {
+            font-size: 1.5em !important;
+        }
+        .logo-container {
+            width: 70px !important;
+            height: 70px !important;
+        }
+        .logo-container img {
+            width: 45px !important;
+            height: 45px !important;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # ========== SETTINGS ==========
 PERIOD = "6mo"
 SWING_LENGTHS = [2, 3, 5]
