@@ -61,38 +61,33 @@ st.markdown("""
     /* TradingView Style Logo Container - Main Header */
     .logo-container {
         position: relative;
-        width: 85px;
-        height: 85px;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #1a1a2e 0%, #0d1b2a 100%);
+        width: 90px;
+        height: 90px;
+        border-radius: 18px;
+        background: linear-gradient(145deg, #131722 0%, #1e222d 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 2px solid transparent;
-        background-clip: padding-box;
-        animation: borderGlow 3s ease-in-out infinite;
+        border: 3px solid #2962ff;
+        box-shadow: 0 0 20px rgba(41, 98, 255, 0.4), 
+                    0 0 40px rgba(41, 98, 255, 0.2),
+                    inset 0 0 30px rgba(41, 98, 255, 0.1);
+        overflow: hidden;
     }
     .logo-container::before {
         content: '';
         position: absolute;
-        top: -3px; left: -3px; right: -3px; bottom: -3px;
-        background: linear-gradient(135deg, #00d4ff, #7c3aed, #00ff88, #ffd700);
-        border-radius: 18px;
-        z-index: -1;
-        background-size: 300% 300%;
-        animation: gradientMove 4s ease infinite;
-    }
-    @keyframes gradientMove {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, rgba(41,98,255,0.1) 0%, transparent 50%, rgba(0,212,255,0.1) 100%);
+        border-radius: 15px;
     }
     .logo-container img {
-        height: 60px;
-        width: 60px;
+        height: 55px;
+        width: 55px;
         object-fit: contain;
-        filter: invert(1) drop-shadow(0 0 8px rgba(255,215,0,0.5));
-        animation: logoPulse 3s ease-in-out infinite;
+        filter: invert(1) brightness(1.1);
+        position: relative;
+        z-index: 1;
     }
     
     /* Sidebar Logo - TradingView Style */
