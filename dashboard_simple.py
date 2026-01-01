@@ -248,7 +248,58 @@ def show_login_page():
                         if success:
                             st.success(f"✅ {message}")
                             st.info("👆 Now go to Login tab and login!")
-                            st.balloons()
+                            # Celebration Animation - Confetti + Sparkles
+                            st.markdown("""
+                            <style>
+                            @keyframes confetti-fall {
+                                0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+                                100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+                            }
+                            @keyframes sparkle {
+                                0%, 100% { opacity: 0; transform: scale(0); }
+                                50% { opacity: 1; transform: scale(1); }
+                            }
+                            .confetti-container {
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                pointer-events: none;
+                                z-index: 9999;
+                                overflow: hidden;
+                            }
+                            .confetti {
+                                position: absolute;
+                                font-size: 25px;
+                                animation: confetti-fall 4s ease-out forwards;
+                            }
+                            .sparkle-text {
+                                text-align: center;
+                                font-size: 2em;
+                                animation: sparkle 0.5s ease-in-out infinite;
+                            }
+                            </style>
+                            <div class="confetti-container">
+                                <div class="confetti" style="left: 5%; animation-delay: 0s;">🎉</div>
+                                <div class="confetti" style="left: 15%; animation-delay: 0.2s;">⭐</div>
+                                <div class="confetti" style="left: 25%; animation-delay: 0.4s;">🎊</div>
+                                <div class="confetti" style="left: 35%; animation-delay: 0.1s;">✨</div>
+                                <div class="confetti" style="left: 45%; animation-delay: 0.3s;">🌟</div>
+                                <div class="confetti" style="left: 55%; animation-delay: 0.5s;">🎉</div>
+                                <div class="confetti" style="left: 65%; animation-delay: 0.2s;">💫</div>
+                                <div class="confetti" style="left: 75%; animation-delay: 0.4s;">⭐</div>
+                                <div class="confetti" style="left: 85%; animation-delay: 0.1s;">🎊</div>
+                                <div class="confetti" style="left: 95%; animation-delay: 0.3s;">✨</div>
+                                <div class="confetti" style="left: 10%; animation-delay: 0.6s;">🌟</div>
+                                <div class="confetti" style="left: 30%; animation-delay: 0.7s;">💫</div>
+                                <div class="confetti" style="left: 50%; animation-delay: 0.8s;">🎉</div>
+                                <div class="confetti" style="left: 70%; animation-delay: 0.9s;">⭐</div>
+                                <div class="confetti" style="left: 90%; animation-delay: 1s;">🎊</div>
+                            </div>
+                            <div class="sparkle-text">🎉 Welcome to TAWAQQUL! 🎉</div>
+                            """, unsafe_allow_html=True)
+                            st.snow()
                         else:
                             st.error(f"❌ {message}")
         
