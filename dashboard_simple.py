@@ -218,6 +218,84 @@ def show_login_page():
                             st.session_state['authenticated'] = True
                             st.session_state['username'] = username
                             st.success(f"✅ Welcome back, {username}!")
+                            # Login Success Animation - Rocket Launch Effect
+                            st.markdown("""
+                            <style>
+                            @keyframes rocket-launch {
+                                0% { transform: translateY(100px) scale(1); opacity: 0; }
+                                50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+                                100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
+                            }
+                            @keyframes pulse-glow {
+                                0%, 100% { box-shadow: 0 0 20px #00ff88, 0 0 40px rgba(0,255,136,0.4); }
+                                50% { box-shadow: 0 0 40px #00ff88, 0 0 80px rgba(0,255,136,0.6); }
+                            }
+                            @keyframes text-pop {
+                                0% { transform: scale(0); opacity: 0; }
+                                50% { transform: scale(1.3); }
+                                100% { transform: scale(1); opacity: 1; }
+                            }
+                            .login-success-container {
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                pointer-events: none;
+                                z-index: 9999;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            }
+                            .rocket {
+                                font-size: 60px;
+                                animation: rocket-launch 2s ease-out forwards;
+                            }
+                            .welcome-box {
+                                background: linear-gradient(135deg, #0d4f3c 0%, #1a7f5a 100%);
+                                padding: 20px 40px;
+                                border-radius: 15px;
+                                animation: pulse-glow 1s ease-in-out infinite, text-pop 0.5s ease-out;
+                            }
+                            .welcome-box h2 {
+                                color: #fff;
+                                margin: 0;
+                                font-size: 1.5em;
+                            }
+                            .stars-container {
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                pointer-events: none;
+                                z-index: 9998;
+                            }
+                            .star {
+                                position: absolute;
+                                font-size: 20px;
+                                animation: rocket-launch 1.5s ease-out forwards;
+                            }
+                            </style>
+                            <div class="stars-container">
+                                <div class="star" style="left: 20%; top: 60%; animation-delay: 0.1s;">✨</div>
+                                <div class="star" style="left: 40%; top: 70%; animation-delay: 0.2s;">⭐</div>
+                                <div class="star" style="left: 60%; top: 65%; animation-delay: 0.3s;">🌟</div>
+                                <div class="star" style="left: 80%; top: 75%; animation-delay: 0.4s;">💫</div>
+                                <div class="star" style="left: 30%; top: 80%; animation-delay: 0.5s;">✨</div>
+                                <div class="star" style="left: 70%; top: 85%; animation-delay: 0.6s;">⭐</div>
+                            </div>
+                            <div class="login-success-container">
+                                <div class="rocket">🚀</div>
+                            </div>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div class="welcome-box">
+                                    <h2>🎯 Let's Go Trading! 🎯</h2>
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                            import time
+                            time.sleep(1.5)
                             st.rerun()
                         else:
                             st.error("❌ Invalid username or password!")
