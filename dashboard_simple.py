@@ -281,70 +281,91 @@ def show_login_page():
                             st.session_state['authenticated'] = True
                             st.session_state['username'] = username
                             st.success(f"✅ Welcome back, {username}!")
-                            # Login Success Animation - Confetti Rain
+                            # Login Success Animation - Clean Professional
                             st.markdown("""
                             <style>
-                            @keyframes confetti-fall {
-                                0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-                                100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+                            @keyframes slideInUp {
+                                0% { transform: translateY(50px); opacity: 0; }
+                                100% { transform: translateY(0); opacity: 1; }
                             }
-                            @keyframes pulse-glow {
-                                0%, 100% { box-shadow: 0 0 20px #00ff88, 0 0 40px rgba(0,255,136,0.4); }
-                                50% { box-shadow: 0 0 40px #00ff88, 0 0 80px rgba(0,255,136,0.6); }
+                            @keyframes checkmark {
+                                0% { stroke-dashoffset: 100; }
+                                100% { stroke-dashoffset: 0; }
                             }
-                            @keyframes text-pop {
-                                0% { transform: scale(0); opacity: 0; }
-                                50% { transform: scale(1.3); }
-                                100% { transform: scale(1); opacity: 1; }
+                            @keyframes circle-fill {
+                                0% { transform: scale(0); }
+                                50% { transform: scale(1.1); }
+                                100% { transform: scale(1); }
                             }
-                            .confetti-container {
-                                position: fixed;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                pointer-events: none;
-                                z-index: 9999;
-                                overflow: hidden;
+                            @keyframes glow-pulse {
+                                0%, 100% { box-shadow: 0 0 30px rgba(0,255,136,0.4); }
+                                50% { box-shadow: 0 0 50px rgba(0,255,136,0.7), 0 0 80px rgba(0,255,136,0.3); }
                             }
-                            .confetti {
-                                position: absolute;
-                                font-size: 28px;
-                                animation: confetti-fall 3s ease-out forwards;
+                            .login-success-container {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                padding: 30px;
+                                animation: slideInUp 0.5s ease-out;
                             }
-                            .welcome-box {
-                                background: linear-gradient(135deg, #0d4f3c 0%, #1a7f5a 100%);
-                                padding: 20px 40px;
+                            .success-circle {
+                                width: 80px;
+                                height: 80px;
+                                background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                animation: circle-fill 0.6s ease-out, glow-pulse 1.5s ease-in-out infinite;
+                                margin-bottom: 20px;
+                            }
+                            .success-circle svg {
+                                width: 40px;
+                                height: 40px;
+                            }
+                            .success-circle path {
+                                stroke: #fff;
+                                stroke-width: 3;
+                                fill: none;
+                                stroke-linecap: round;
+                                stroke-linejoin: round;
+                                stroke-dasharray: 100;
+                                animation: checkmark 0.8s ease-out 0.3s forwards;
+                                stroke-dashoffset: 100;
+                            }
+                            .welcome-msg {
+                                background: linear-gradient(135deg, #1a2f23 0%, #0d4f3c 100%);
+                                padding: 20px 50px;
                                 border-radius: 15px;
-                                animation: pulse-glow 1s ease-in-out infinite, text-pop 0.5s ease-out;
+                                border: 1px solid rgba(0,255,136,0.3);
+                                text-align: center;
                             }
-                            .welcome-box h2 {
-                                color: #fff;
+                            .welcome-msg h2 {
+                                color: #00ff88;
+                                margin: 0 0 5px 0;
+                                font-size: 1.4em;
+                            }
+                            .welcome-msg p {
+                                color: #a0c4e8;
                                 margin: 0;
-                                font-size: 1.5em;
+                                font-size: 0.9em;
                             }
                             </style>
-                            <div class="confetti-container">
-                                <div class="confetti" style="left: 5%; animation-delay: 0s;">🎉</div>
-                                <div class="confetti" style="left: 15%; animation-delay: 0.2s;">⭐</div>
-                                <div class="confetti" style="left: 25%; animation-delay: 0.4s;">🎊</div>
-                                <div class="confetti" style="left: 35%; animation-delay: 0.1s;">✨</div>
-                                <div class="confetti" style="left: 45%; animation-delay: 0.3s;">🌟</div>
-                                <div class="confetti" style="left: 55%; animation-delay: 0.5s;">🎉</div>
-                                <div class="confetti" style="left: 65%; animation-delay: 0.2s;">💫</div>
-                                <div class="confetti" style="left: 75%; animation-delay: 0.4s;">⭐</div>
-                                <div class="confetti" style="left: 85%; animation-delay: 0.1s;">🎊</div>
-                                <div class="confetti" style="left: 95%; animation-delay: 0.3s;">✨</div>
-                            </div>
-                            <div style="text-align: center; margin-top: 20px;">
-                                <div class="welcome-box">
-                                    <h2>🎯 Let's Go Trading! 🎯</h2>
+                            <div class="login-success-container">
+                                <div class="success-circle">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="welcome-msg">
+                                    <h2>✨ Login Successful</h2>
+                                    <p>Redirecting to dashboard...</p>
                                 </div>
                             </div>
                             """, unsafe_allow_html=True)
-                            st.snow()
                             import time
-                            time.sleep(1.5)
+                            time.sleep(2.5)
                             st.rerun()
                         else:
                             st.error("❌ Invalid username or password!")
@@ -398,96 +419,125 @@ def show_login_page():
                         if success:
                             st.success(f"✅ {message}")
                             st.info("👆 Now go to Login tab and login!")
-                            # Celebration Animation - Fireworks + Rocket Launch
+                            # Signup Success Animation - Professional Shield Lock
                             st.markdown("""
                             <style>
-                            @keyframes firework-explode {
-                                0% { transform: scale(0) rotate(0deg); opacity: 1; }
-                                50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
-                                100% { transform: scale(2) rotate(360deg); opacity: 0; }
+                            @keyframes shield-pop {
+                                0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+                                60% { transform: scale(1.1) rotate(5deg); }
+                                100% { transform: scale(1) rotate(0deg); opacity: 1; }
                             }
-                            @keyframes rocket-launch {
-                                0% { transform: translateY(100px) scale(1); opacity: 0; }
-                                30% { transform: translateY(0px) scale(1.2); opacity: 1; }
-                                100% { transform: translateY(-300px) scale(0.3); opacity: 0; }
+                            @keyframes lock-click {
+                                0%, 40% { transform: translateY(0); }
+                                50% { transform: translateY(-3px); }
+                                60% { transform: translateY(0); }
                             }
-                            @keyframes star-burst {
-                                0% { transform: scale(0) translateY(0); opacity: 1; }
-                                100% { transform: scale(1) translateY(-100px); opacity: 0; }
+                            @keyframes ring-expand {
+                                0% { transform: scale(0.8); opacity: 0.8; }
+                                100% { transform: scale(2); opacity: 0; }
                             }
-                            @keyframes rainbow-glow {
-                                0% { box-shadow: 0 0 20px #ff0000; }
-                                20% { box-shadow: 0 0 30px #ff8800; }
-                                40% { box-shadow: 0 0 40px #ffff00; }
-                                60% { box-shadow: 0 0 30px #00ff00; }
-                                80% { box-shadow: 0 0 30px #0088ff; }
-                                100% { box-shadow: 0 0 20px #ff00ff; }
+                            @keyframes fade-slide {
+                                0% { transform: translateY(20px); opacity: 0; }
+                                100% { transform: translateY(0); opacity: 1; }
                             }
-                            @keyframes bounce-in {
-                                0% { transform: scale(0); }
-                                50% { transform: scale(1.3); }
-                                70% { transform: scale(0.9); }
-                                100% { transform: scale(1); }
+                            @keyframes shimmer {
+                                0% { background-position: -200% center; }
+                                100% { background-position: 200% center; }
                             }
-                            .firework-container {
-                                position: fixed;
+                            .signup-success-wrap {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                padding: 25px;
+                            }
+                            .shield-container {
+                                position: relative;
+                                width: 90px;
+                                height: 90px;
+                                margin-bottom: 20px;
+                            }
+                            .shield-icon {
+                                width: 90px;
+                                height: 90px;
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                animation: shield-pop 0.7s ease-out;
+                                box-shadow: 0 10px 40px rgba(102,126,234,0.4);
+                            }
+                            .shield-icon span {
+                                font-size: 45px;
+                                animation: lock-click 1.5s ease-in-out infinite;
+                            }
+                            .ring {
+                                position: absolute;
                                 top: 0;
                                 left: 0;
-                                width: 100%;
-                                height: 100%;
-                                pointer-events: none;
-                                z-index: 9999;
-                                overflow: hidden;
+                                width: 90px;
+                                height: 90px;
+                                border: 3px solid #667eea;
+                                border-radius: 50%;
+                                animation: ring-expand 1.5s ease-out infinite;
                             }
-                            .firework {
-                                position: absolute;
-                                font-size: 40px;
-                                animation: firework-explode 1.5s ease-out forwards;
-                            }
-                            .rocket {
-                                position: absolute;
-                                font-size: 50px;
-                                left: 50%;
-                                bottom: 20%;
-                                animation: rocket-launch 2s ease-out forwards;
-                            }
-                            .star-burst {
-                                position: absolute;
-                                font-size: 30px;
-                                animation: star-burst 1s ease-out forwards;
-                            }
-                            .welcome-signup-box {
+                            .signup-msg-box {
+                                background: linear-gradient(135deg, #1e1e3f 0%, #2d2d5a 100%);
+                                padding: 20px 45px;
+                                border-radius: 15px;
+                                border: 1px solid rgba(102,126,234,0.4);
                                 text-align: center;
-                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                                padding: 25px 50px;
-                                border-radius: 20px;
-                                animation: bounce-in 0.6s ease-out, rainbow-glow 2s ease-in-out infinite;
-                                margin-top: 20px;
+                                animation: fade-slide 0.5s ease-out 0.3s both;
                             }
-                            .welcome-signup-box h2 {
+                            .signup-msg-box h2 {
                                 color: #fff;
+                                margin: 0 0 8px 0;
+                                font-size: 1.3em;
+                                background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+                                background-size: 200% auto;
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                background-clip: text;
+                                animation: shimmer 3s linear infinite;
+                            }
+                            .signup-msg-box p {
+                                color: #a0c4e8;
                                 margin: 0;
-                                font-size: 1.8em;
-                                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                                font-size: 0.9em;
+                            }
+                            .feature-badges {
+                                display: flex;
+                                gap: 10px;
+                                margin-top: 15px;
+                                animation: fade-slide 0.5s ease-out 0.5s both;
+                            }
+                            .badge {
+                                background: rgba(102,126,234,0.2);
+                                padding: 5px 12px;
+                                border-radius: 20px;
+                                font-size: 0.75em;
+                                color: #a0c4e8;
+                                border: 1px solid rgba(102,126,234,0.3);
                             }
                             </style>
-                            <div class="firework-container">
-                                <div class="firework" style="left: 10%; top: 20%; animation-delay: 0s;">🎆</div>
-                                <div class="firework" style="left: 80%; top: 15%; animation-delay: 0.3s;">🎇</div>
-                                <div class="firework" style="left: 50%; top: 10%; animation-delay: 0.5s;">💥</div>
-                                <div class="firework" style="left: 30%; top: 25%; animation-delay: 0.7s;">🎆</div>
-                                <div class="firework" style="left: 70%; top: 30%; animation-delay: 0.9s;">🎇</div>
-                                <div class="star-burst" style="left: 20%; top: 40%; animation-delay: 0.2s;">⭐</div>
-                                <div class="star-burst" style="left: 40%; top: 35%; animation-delay: 0.4s;">🌟</div>
-                                <div class="star-burst" style="left: 60%; top: 38%; animation-delay: 0.6s;">✨</div>
-                                <div class="star-burst" style="left: 80%; top: 42%; animation-delay: 0.8s;">💫</div>
-                                <div class="rocket">🚀</div>
-                            </div>
-                            <div class="welcome-signup-box">
-                                <h2>🎉 Account Created! 🎉</h2>
+                            <div class="signup-success-wrap">
+                                <div class="shield-container">
+                                    <div class="ring"></div>
+                                    <div class="shield-icon">
+                                        <span>🔐</span>
+                                    </div>
+                                </div>
+                                <div class="signup-msg-box">
+                                    <h2>Account Created Successfully!</h2>
+                                    <p>Your secure account is ready</p>
+                                </div>
+                                <div class="feature-badges">
+                                    <span class="badge">🔒 Secure</span>
+                                    <span class="badge">⚡ Fast</span>
+                                    <span class="badge">✨ Premium</span>
+                                </div>
                             </div>
                             """, unsafe_allow_html=True)
-                            st.balloons()
                         else:
                             st.error(f"❌ {message}")
         
