@@ -254,8 +254,8 @@ def show_login_page():
         
         st.markdown("""
         <div style="text-align: center; margin-top: 30px; color: #6e7681; font-size: 0.85em;">
-            <p>📧 Contact: @yousufkidiya17</p>
-            <p>🔒 Secure Login System • Unlimited Users</p>
+            <p>📧 kidiyayousuf17@gmail.com</p>
+            <p>🔒 Secure Login System</p>
         </div>
         """, unsafe_allow_html=True)
 
