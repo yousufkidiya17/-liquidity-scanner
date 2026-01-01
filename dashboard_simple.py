@@ -49,6 +49,11 @@ def add_user(username, password, name=""):
     if username.lower() in [u.lower() for u in users.keys()]:
         return False, "Username already exists!"
     
+    # Password validation
+    is_valid, error_msg = validate_password(password)
+    if not is_valid:
+        return False, error_msg
+    
     users[username] = {
         "password": hashlib.sha256(password.encode()).hexdigest(),
         "name": name if name else username,
@@ -56,6 +61,57 @@ def add_user(username, password, name=""):
     }
     save_users(users)
     return True, "Account created successfully!"
+
+def validate_password(password):
+    """Validate password with proper rules"""
+    import re
+    
+    if len(password) < 8:
+        return False, "Password must be at least 8 characters!"
+    if not re.search(r'[A-Z]', password):
+        return False, "Password must contain at least 1 uppercase letter!"
+    if not re.search(r'[a-z]', password):
+        return False, "Password must contain at least 1 lowercase letter!"
+    if not re.search(r'[0-9]', password):
+        return False, "Password must contain at least 1 number!"
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>_\-+=]', password):
+        return False, "Password must contain at least 1 special character (!@#$%^&* etc)!"
+    
+    return True, "Valid password"
+
+def get_password_strength(password):
+    """Calculate password strength"""
+    import re
+    
+    if not password:
+        return 0, "Enter password", "#6e7681"
+    
+    score = 0
+    feedback = []
+    
+    # Length checks
+    if len(password) >= 8:
+        score += 1
+    if len(password) >= 12:
+        score += 1
+    
+    # Character type checks
+    if re.search(r'[A-Z]', password):
+        score += 1
+    if re.search(r'[a-z]', password):
+        score += 1
+    if re.search(r'[0-9]', password):
+        score += 1
+    if re.search(r'[!@#$%^&*(),.?":{}|<>_\-+=]', password):
+        score += 1
+    
+    # Determine strength
+    if score <= 2:
+        return score, "🔴 Weak", "#ff4444"
+    elif score <= 4:
+        return score, "🟡 Medium", "#ffaa00"
+    else:
+        return score, "🟢 Strong", "#00ff88"
 
 def verify_user(username, password):
     """Verify user credentials (case-insensitive username)"""
@@ -314,7 +370,32 @@ def show_login_page():
                 st.markdown("### 📝 Create New Account")
                 new_username = st.text_input("Choose Username", placeholder="Enter username", key="signup_user")
                 new_name = st.text_input("Your Name (Optional)", placeholder="Enter your name", key="signup_name")
-                new_password = st.text_input("Create Password", type="password", placeholder="Min 4 characters", key="signup_pass")
+                new_password = st.text_input("Create Password", type="password", placeholder="Min 8 chars, A-Z, a-z, 0-9, special", key="signup_pass")
+                
+                # Password strength indicator
+                if new_password:
+                    strength_score, strength_text, strength_color = get_password_strength(new_password)
+                    st.markdown(f"""
+                    <div style="margin: -10px 0 10px 0;">
+                        <div style="background: #1e2530; border-radius: 10px; padding: 3px; margin-bottom: 5px;">
+                            <div style="width: {min(strength_score * 16.66, 100)}%; height: 6px; background: {strength_color}; border-radius: 8px; transition: all 0.3s;"></div>
+                        </div>
+                        <span style="color: {strength_color}; font-size: 0.85em; font-weight: 600;">{strength_text}</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                # Password requirements hint
+                st.markdown("""
+                <div style="background: rgba(0,212,255,0.1); padding: 10px; border-radius: 8px; margin: 5px 0 15px 0; font-size: 0.8em; color: #a0c4e8;">
+                    <strong>📋 Password Requirements:</strong><br>
+                    ✓ Minimum 8 characters<br>
+                    ✓ At least 1 uppercase (A-Z)<br>
+                    ✓ At least 1 lowercase (a-z)<br>
+                    ✓ At least 1 number (0-9)<br>
+                    ✓ At least 1 special character (!@#$%^&*)
+                </div>
+                """, unsafe_allow_html=True)
+                
                 confirm_password = st.text_input("Confirm Password", type="password", placeholder="Re-enter password", key="signup_confirm")
                 
                 signup_btn = st.form_submit_button("✨ Create Account", use_container_width=True, type="primary")
@@ -324,8 +405,6 @@ def show_login_page():
                         st.warning("⚠️ Username and Password are required!")
                     elif len(new_username) < 3:
                         st.warning("⚠️ Username must be at least 3 characters!")
-                    elif len(new_password) < 4:
-                        st.warning("⚠️ Password must be at least 4 characters!")
                     elif new_password != confirm_password:
                         st.error("❌ Passwords don't match!")
                     else:
