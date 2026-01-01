@@ -280,92 +280,47 @@ def show_login_page():
                         if check_password(username, password):
                             st.session_state['authenticated'] = True
                             st.session_state['username'] = username
-                            st.success(f"✅ Welcome back, {username}!")
-                            # Login Success Animation - Clean Professional
-                            st.markdown("""
-                            <style>
-                            @keyframes slideInUp {
-                                0% { transform: translateY(50px); opacity: 0; }
-                                100% { transform: translateY(0); opacity: 1; }
-                            }
-                            @keyframes checkmark {
-                                0% { stroke-dashoffset: 100; }
-                                100% { stroke-dashoffset: 0; }
-                            }
-                            @keyframes circle-fill {
-                                0% { transform: scale(0); }
-                                50% { transform: scale(1.1); }
-                                100% { transform: scale(1); }
-                            }
-                            @keyframes glow-pulse {
-                                0%, 100% { box-shadow: 0 0 30px rgba(0,255,136,0.4); }
-                                50% { box-shadow: 0 0 50px rgba(0,255,136,0.7), 0 0 80px rgba(0,255,136,0.3); }
-                            }
-                            .login-success-container {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                                justify-content: center;
+                            
+                            # Show success animation in a container
+                            success_container = st.empty()
+                            success_container.markdown(f"""
+                            <div style="
+                                background: linear-gradient(135deg, #0d4f3c 0%, #1a7f5a 100%);
                                 padding: 30px;
-                                animation: slideInUp 0.5s ease-out;
-                            }
-                            .success-circle {
-                                width: 80px;
-                                height: 80px;
-                                background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
-                                border-radius: 50%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                animation: circle-fill 0.6s ease-out, glow-pulse 1.5s ease-in-out infinite;
-                                margin-bottom: 20px;
-                            }
-                            .success-circle svg {
-                                width: 40px;
-                                height: 40px;
-                            }
-                            .success-circle path {
-                                stroke: #fff;
-                                stroke-width: 3;
-                                fill: none;
-                                stroke-linecap: round;
-                                stroke-linejoin: round;
-                                stroke-dasharray: 100;
-                                animation: checkmark 0.8s ease-out 0.3s forwards;
-                                stroke-dashoffset: 100;
-                            }
-                            .welcome-msg {
-                                background: linear-gradient(135deg, #1a2f23 0%, #0d4f3c 100%);
-                                padding: 20px 50px;
-                                border-radius: 15px;
-                                border: 1px solid rgba(0,255,136,0.3);
+                                border-radius: 20px;
                                 text-align: center;
-                            }
-                            .welcome-msg h2 {
-                                color: #00ff88;
-                                margin: 0 0 5px 0;
-                                font-size: 1.4em;
-                            }
-                            .welcome-msg p {
-                                color: #a0c4e8;
-                                margin: 0;
-                                font-size: 0.9em;
-                            }
-                            </style>
-                            <div class="login-success-container">
-                                <div class="success-circle">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M5 13l4 4L19 7"/>
-                                    </svg>
+                                border: 2px solid #00ff88;
+                                box-shadow: 0 0 30px rgba(0,255,136,0.4);
+                                margin: 20px 0;
+                            ">
+                                <div style="font-size: 60px; margin-bottom: 15px;">✅</div>
+                                <h2 style="color: #00ff88; margin: 0 0 10px 0; font-size: 1.6em;">Welcome back, {username}!</h2>
+                                <p style="color: #a0c4e8; margin: 0; font-size: 1em;">🚀 Redirecting to dashboard...</p>
+                                <div style="
+                                    margin-top: 20px;
+                                    height: 4px;
+                                    background: rgba(255,255,255,0.2);
+                                    border-radius: 2px;
+                                    overflow: hidden;
+                                ">
+                                    <div style="
+                                        height: 100%;
+                                        width: 100%;
+                                        background: linear-gradient(90deg, #00ff88, #00d4ff);
+                                        animation: loading 2s ease-in-out;
+                                    "></div>
                                 </div>
-                                <div class="welcome-msg">
-                                    <h2>✨ Login Successful</h2>
-                                    <p>Redirecting to dashboard...</p>
-                                </div>
+                                <style>
+                                    @keyframes loading {{
+                                        0% {{ width: 0%; }}
+                                        100% {{ width: 100%; }}
+                                    }}
+                                </style>
                             </div>
                             """, unsafe_allow_html=True)
+                            
                             import time
-                            time.sleep(2.5)
+                            time.sleep(2)
                             st.rerun()
                         else:
                             st.error("❌ Invalid username or password!")
