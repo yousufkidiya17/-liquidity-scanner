@@ -121,6 +121,10 @@ st.markdown("""
         0%, 100% { box-shadow: 0 0 10px #ffd700, 0 0 20px rgba(255,215,0,0.3); }
         50% { box-shadow: 0 0 20px #ffd700, 0 0 40px rgba(255,215,0,0.5); }
     }
+    @keyframes textGlow {
+        0%, 100% { text-shadow: 0 0 5px #ffd700, 0 0 10px rgba(255,215,0,0.3); }
+        50% { text-shadow: 0 0 15px #ffd700, 0 0 25px rgba(255,215,0,0.5), 0 0 35px rgba(255,215,0,0.3); }
+    }
     .welcome-text {
         text-align: center;
         color: #00ff88;
@@ -159,9 +163,8 @@ def show_login_page():
                     <img src="data:image/png;base64,{logo_b64}" style="width: 50px; filter: invert(1);">
                 </div>
                 <h1 style="color: #ffffff; margin: 10px 0;">🔐 TAWAQQUL SCANNER</h1>
-                <p style="color: #ffd700; font-size: 1.2em; direction: rtl;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                <p style="color: #ffd700; font-size: 1.2em; direction: rtl; animation: textGlow 3s ease-in-out infinite;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
                 <p style="color: #a0c4e8;">Premium Liquidity Scanner</p>
-                <p style="color: #00ff88; font-size: 0.9em;">👥 {get_user_count()} Registered Users</p>
             </div>
             """, unsafe_allow_html=True)
         
