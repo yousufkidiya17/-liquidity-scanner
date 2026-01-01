@@ -281,13 +281,12 @@ def show_login_page():
                             st.session_state['authenticated'] = True
                             st.session_state['username'] = username
                             st.success(f"✅ Welcome back, {username}!")
-                            # Login Success Animation - Rocket Launch Effect
+                            # Login Success Animation - Confetti Rain
                             st.markdown("""
                             <style>
-                            @keyframes rocket-launch {
-                                0% { transform: translateY(100px) scale(1); opacity: 0; }
-                                50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
-                                100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
+                            @keyframes confetti-fall {
+                                0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+                                100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
                             }
                             @keyframes pulse-glow {
                                 0%, 100% { box-shadow: 0 0 20px #00ff88, 0 0 40px rgba(0,255,136,0.4); }
@@ -298,7 +297,7 @@ def show_login_page():
                                 50% { transform: scale(1.3); }
                                 100% { transform: scale(1); opacity: 1; }
                             }
-                            .login-success-container {
+                            .confetti-container {
                                 position: fixed;
                                 top: 0;
                                 left: 0;
@@ -306,13 +305,12 @@ def show_login_page():
                                 height: 100%;
                                 pointer-events: none;
                                 z-index: 9999;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
+                                overflow: hidden;
                             }
-                            .rocket {
-                                font-size: 60px;
-                                animation: rocket-launch 2s ease-out forwards;
+                            .confetti {
+                                position: absolute;
+                                font-size: 28px;
+                                animation: confetti-fall 3s ease-out forwards;
                             }
                             .welcome-box {
                                 background: linear-gradient(135deg, #0d4f3c 0%, #1a7f5a 100%);
@@ -325,31 +323,18 @@ def show_login_page():
                                 margin: 0;
                                 font-size: 1.5em;
                             }
-                            .stars-container {
-                                position: fixed;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                pointer-events: none;
-                                z-index: 9998;
-                            }
-                            .star {
-                                position: absolute;
-                                font-size: 20px;
-                                animation: rocket-launch 1.5s ease-out forwards;
-                            }
                             </style>
-                            <div class="stars-container">
-                                <div class="star" style="left: 20%; top: 60%; animation-delay: 0.1s;">✨</div>
-                                <div class="star" style="left: 40%; top: 70%; animation-delay: 0.2s;">⭐</div>
-                                <div class="star" style="left: 60%; top: 65%; animation-delay: 0.3s;">🌟</div>
-                                <div class="star" style="left: 80%; top: 75%; animation-delay: 0.4s;">💫</div>
-                                <div class="star" style="left: 30%; top: 80%; animation-delay: 0.5s;">✨</div>
-                                <div class="star" style="left: 70%; top: 85%; animation-delay: 0.6s;">⭐</div>
-                            </div>
-                            <div class="login-success-container">
-                                <div class="rocket">🚀</div>
+                            <div class="confetti-container">
+                                <div class="confetti" style="left: 5%; animation-delay: 0s;">🎉</div>
+                                <div class="confetti" style="left: 15%; animation-delay: 0.2s;">⭐</div>
+                                <div class="confetti" style="left: 25%; animation-delay: 0.4s;">🎊</div>
+                                <div class="confetti" style="left: 35%; animation-delay: 0.1s;">✨</div>
+                                <div class="confetti" style="left: 45%; animation-delay: 0.3s;">🌟</div>
+                                <div class="confetti" style="left: 55%; animation-delay: 0.5s;">🎉</div>
+                                <div class="confetti" style="left: 65%; animation-delay: 0.2s;">💫</div>
+                                <div class="confetti" style="left: 75%; animation-delay: 0.4s;">⭐</div>
+                                <div class="confetti" style="left: 85%; animation-delay: 0.1s;">🎊</div>
+                                <div class="confetti" style="left: 95%; animation-delay: 0.3s;">✨</div>
                             </div>
                             <div style="text-align: center; margin-top: 20px;">
                                 <div class="welcome-box">
@@ -357,6 +342,7 @@ def show_login_page():
                                 </div>
                             </div>
                             """, unsafe_allow_html=True)
+                            st.snow()
                             import time
                             time.sleep(1.5)
                             st.rerun()
@@ -412,18 +398,38 @@ def show_login_page():
                         if success:
                             st.success(f"✅ {message}")
                             st.info("👆 Now go to Login tab and login!")
-                            # Celebration Animation - Confetti + Sparkles
+                            # Celebration Animation - Fireworks + Rocket Launch
                             st.markdown("""
                             <style>
-                            @keyframes confetti-fall {
-                                0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-                                100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+                            @keyframes firework-explode {
+                                0% { transform: scale(0) rotate(0deg); opacity: 1; }
+                                50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
+                                100% { transform: scale(2) rotate(360deg); opacity: 0; }
                             }
-                            @keyframes sparkle {
-                                0%, 100% { opacity: 0; transform: scale(0); }
-                                50% { opacity: 1; transform: scale(1); }
+                            @keyframes rocket-launch {
+                                0% { transform: translateY(100px) scale(1); opacity: 0; }
+                                30% { transform: translateY(0px) scale(1.2); opacity: 1; }
+                                100% { transform: translateY(-300px) scale(0.3); opacity: 0; }
                             }
-                            .confetti-container {
+                            @keyframes star-burst {
+                                0% { transform: scale(0) translateY(0); opacity: 1; }
+                                100% { transform: scale(1) translateY(-100px); opacity: 0; }
+                            }
+                            @keyframes rainbow-glow {
+                                0% { box-shadow: 0 0 20px #ff0000; }
+                                20% { box-shadow: 0 0 30px #ff8800; }
+                                40% { box-shadow: 0 0 40px #ffff00; }
+                                60% { box-shadow: 0 0 30px #00ff00; }
+                                80% { box-shadow: 0 0 30px #0088ff; }
+                                100% { box-shadow: 0 0 20px #ff00ff; }
+                            }
+                            @keyframes bounce-in {
+                                0% { transform: scale(0); }
+                                50% { transform: scale(1.3); }
+                                70% { transform: scale(0.9); }
+                                100% { transform: scale(1); }
+                            }
+                            .firework-container {
                                 position: fixed;
                                 top: 0;
                                 left: 0;
@@ -433,37 +439,55 @@ def show_login_page():
                                 z-index: 9999;
                                 overflow: hidden;
                             }
-                            .confetti {
+                            .firework {
                                 position: absolute;
-                                font-size: 25px;
-                                animation: confetti-fall 4s ease-out forwards;
+                                font-size: 40px;
+                                animation: firework-explode 1.5s ease-out forwards;
                             }
-                            .sparkle-text {
+                            .rocket {
+                                position: absolute;
+                                font-size: 50px;
+                                left: 50%;
+                                bottom: 20%;
+                                animation: rocket-launch 2s ease-out forwards;
+                            }
+                            .star-burst {
+                                position: absolute;
+                                font-size: 30px;
+                                animation: star-burst 1s ease-out forwards;
+                            }
+                            .welcome-signup-box {
                                 text-align: center;
-                                font-size: 2em;
-                                animation: sparkle 0.5s ease-in-out infinite;
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                padding: 25px 50px;
+                                border-radius: 20px;
+                                animation: bounce-in 0.6s ease-out, rainbow-glow 2s ease-in-out infinite;
+                                margin-top: 20px;
+                            }
+                            .welcome-signup-box h2 {
+                                color: #fff;
+                                margin: 0;
+                                font-size: 1.8em;
+                                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
                             }
                             </style>
-                            <div class="confetti-container">
-                                <div class="confetti" style="left: 5%; animation-delay: 0s;">🎉</div>
-                                <div class="confetti" style="left: 15%; animation-delay: 0.2s;">⭐</div>
-                                <div class="confetti" style="left: 25%; animation-delay: 0.4s;">🎊</div>
-                                <div class="confetti" style="left: 35%; animation-delay: 0.1s;">✨</div>
-                                <div class="confetti" style="left: 45%; animation-delay: 0.3s;">🌟</div>
-                                <div class="confetti" style="left: 55%; animation-delay: 0.5s;">🎉</div>
-                                <div class="confetti" style="left: 65%; animation-delay: 0.2s;">💫</div>
-                                <div class="confetti" style="left: 75%; animation-delay: 0.4s;">⭐</div>
-                                <div class="confetti" style="left: 85%; animation-delay: 0.1s;">🎊</div>
-                                <div class="confetti" style="left: 95%; animation-delay: 0.3s;">✨</div>
-                                <div class="confetti" style="left: 10%; animation-delay: 0.6s;">🌟</div>
-                                <div class="confetti" style="left: 30%; animation-delay: 0.7s;">💫</div>
-                                <div class="confetti" style="left: 50%; animation-delay: 0.8s;">🎉</div>
-                                <div class="confetti" style="left: 70%; animation-delay: 0.9s;">⭐</div>
-                                <div class="confetti" style="left: 90%; animation-delay: 1s;">🎊</div>
+                            <div class="firework-container">
+                                <div class="firework" style="left: 10%; top: 20%; animation-delay: 0s;">🎆</div>
+                                <div class="firework" style="left: 80%; top: 15%; animation-delay: 0.3s;">🎇</div>
+                                <div class="firework" style="left: 50%; top: 10%; animation-delay: 0.5s;">💥</div>
+                                <div class="firework" style="left: 30%; top: 25%; animation-delay: 0.7s;">🎆</div>
+                                <div class="firework" style="left: 70%; top: 30%; animation-delay: 0.9s;">🎇</div>
+                                <div class="star-burst" style="left: 20%; top: 40%; animation-delay: 0.2s;">⭐</div>
+                                <div class="star-burst" style="left: 40%; top: 35%; animation-delay: 0.4s;">🌟</div>
+                                <div class="star-burst" style="left: 60%; top: 38%; animation-delay: 0.6s;">✨</div>
+                                <div class="star-burst" style="left: 80%; top: 42%; animation-delay: 0.8s;">💫</div>
+                                <div class="rocket">🚀</div>
                             </div>
-                            <div class="sparkle-text">🎉 Welcome to TAWAQQUL! 🎉</div>
+                            <div class="welcome-signup-box">
+                                <h2>🎉 Account Created! 🎉</h2>
+                            </div>
                             """, unsafe_allow_html=True)
-                            st.snow()
+                            st.balloons()
                         else:
                             st.error(f"❌ {message}")
         
