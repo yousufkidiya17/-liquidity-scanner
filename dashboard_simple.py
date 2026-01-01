@@ -21,11 +21,11 @@ import json
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 
 # Admin username - ONLY THIS USER CAN ACCESS ADMIN PANEL
-ADMIN_USERNAME = "admin"
+ADMIN_USERNAME = "M.Yousuf"
 
 # Default admin user
 DEFAULT_USERS = {
-    "admin": {"password": hashlib.sha256("admin123".encode()).hexdigest(), "name": "Admin", "created": "2024-01-01"},
+    "M.Yousuf": {"password": hashlib.sha256("MohdYousuf.17@".encode()).hexdigest(), "name": "M.Yousuf", "created": "2024-01-01"},
 }
 
 def load_users():
