@@ -15,13 +15,56 @@ from datetime import datetime, timedelta
 import base64
 from PIL import Image
 import hashlib
+import json
 
-# ========== USER DATABASE (Add your users here) ==========
-USERS = {
-    "admin": hashlib.sha256("admin123".encode()).hexdigest(),
-    "yousuf": hashlib.sha256("tawaqqul".encode()).hexdigest(),
-    "guest": hashlib.sha256("guest123".encode()).hexdigest(),
+# ========== USER DATABASE FILE ==========
+USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
+
+# Default admin user
+DEFAULT_USERS = {
+    "admin": {"password": hashlib.sha256("admin123".encode()).hexdigest(), "name": "Admin", "created": "2024-01-01"},
 }
+
+def load_users():
+    """Load users from JSON file"""
+    if os.path.exists(USERS_FILE):
+        try:
+            with open(USERS_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return DEFAULT_USERS.copy()
+    return DEFAULT_USERS.copy()
+
+def save_users(users):
+    """Save users to JSON file"""
+    with open(USERS_FILE, 'w') as f:
+        json.dump(users, f, indent=2)
+
+def add_user(username, password, name=""):
+    """Add new user to database"""
+    users = load_users()
+    if username.lower() in [u.lower() for u in users.keys()]:
+        return False, "Username already exists!"
+    
+    users[username] = {
+        "password": hashlib.sha256(password.encode()).hexdigest(),
+        "name": name if name else username,
+        "created": datetime.now().strftime("%Y-%m-%d")
+    }
+    save_users(users)
+    return True, "Account created successfully!"
+
+def verify_user(username, password):
+    """Verify user credentials"""
+    users = load_users()
+    if username in users:
+        hashed = hashlib.sha256(password.encode()).hexdigest()
+        return users[username]["password"] == hashed
+    return False
+
+def get_user_count():
+    """Get total registered users"""
+    return len(load_users())
 
 # Load favicon
 favicon_path = os.path.join(os.path.dirname(__file__), "logo.png")
@@ -90,10 +133,7 @@ st.markdown("""
 # ========== AUTHENTICATION FUNCTIONS ==========
 def check_password(username, password):
     """Check if username and password match"""
-    if username in USERS:
-        hashed = hashlib.sha256(password.encode()).hexdigest()
-        return USERS[username] == hashed
-    return False
+    return verify_user(username, password)
 
 def get_logo_base64():
     logo_path = os.path.join(os.path.dirname(__file__), "logo.png")
@@ -121,38 +161,67 @@ def show_login_page():
                 <h1 style="color: #ffffff; margin: 10px 0;">🔐 TAWAQQUL SCANNER</h1>
                 <p style="color: #ffd700; font-size: 1.2em; direction: rtl;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
                 <p style="color: #a0c4e8;">Premium Liquidity Scanner</p>
+                <p style="color: #00ff88; font-size: 0.9em;">👥 {get_user_count()} Registered Users</p>
             </div>
             """, unsafe_allow_html=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
         
-        with st.form("login_form"):
-            st.markdown("### 👤 Login to Continue")
-            username = st.text_input("Username", placeholder="Enter username")
-            password = st.text_input("Password", type="password", placeholder="Enter password")
-            
-            col_a, col_b = st.columns(2)
-            with col_a:
+        # Tabs for Login and Sign Up
+        tab1, tab2 = st.tabs(["🔑 Login", "📝 Sign Up"])
+        
+        with tab1:
+            with st.form("login_form"):
+                st.markdown("### 👤 Login to Continue")
+                username = st.text_input("Username", placeholder="Enter username", key="login_user")
+                password = st.text_input("Password", type="password", placeholder="Enter password", key="login_pass")
+                
                 submit = st.form_submit_button("🚀 Login", use_container_width=True, type="primary")
-            with col_b:
-                if st.form_submit_button("👁️ Demo", use_container_width=True):
-                    st.session_state['authenticated'] = True
-                    st.session_state['username'] = "Demo User"
-                    st.rerun()
-            
-            if submit:
-                if check_password(username, password):
-                    st.session_state['authenticated'] = True
-                    st.session_state['username'] = username
-                    st.success(f"✅ Welcome {username}!")
-                    st.rerun()
-                else:
-                    st.error("❌ Invalid username or password!")
+                
+                if submit:
+                    if username and password:
+                        if check_password(username, password):
+                            st.session_state['authenticated'] = True
+                            st.session_state['username'] = username
+                            st.success(f"✅ Welcome back, {username}!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Invalid username or password!")
+                    else:
+                        st.warning("⚠️ Please enter both username and password!")
+        
+        with tab2:
+            with st.form("signup_form"):
+                st.markdown("### 📝 Create New Account")
+                new_username = st.text_input("Choose Username", placeholder="Enter username", key="signup_user")
+                new_name = st.text_input("Your Name (Optional)", placeholder="Enter your name", key="signup_name")
+                new_password = st.text_input("Create Password", type="password", placeholder="Min 4 characters", key="signup_pass")
+                confirm_password = st.text_input("Confirm Password", type="password", placeholder="Re-enter password", key="signup_confirm")
+                
+                signup_btn = st.form_submit_button("✨ Create Account", use_container_width=True, type="primary")
+                
+                if signup_btn:
+                    if not new_username or not new_password:
+                        st.warning("⚠️ Username and Password are required!")
+                    elif len(new_username) < 3:
+                        st.warning("⚠️ Username must be at least 3 characters!")
+                    elif len(new_password) < 4:
+                        st.warning("⚠️ Password must be at least 4 characters!")
+                    elif new_password != confirm_password:
+                        st.error("❌ Passwords don't match!")
+                    else:
+                        success, message = add_user(new_username, new_password, new_name)
+                        if success:
+                            st.success(f"✅ {message}")
+                            st.info("👆 Now go to Login tab and login!")
+                            st.balloons()
+                        else:
+                            st.error(f"❌ {message}")
         
         st.markdown("""
         <div style="text-align: center; margin-top: 30px; color: #6e7681; font-size: 0.85em;">
             <p>📧 Contact: @yousufkidiya17</p>
-            <p>🔒 Secure Login System</p>
+            <p>🔒 Secure Login System • Unlimited Users</p>
         </div>
         """, unsafe_allow_html=True)
 
