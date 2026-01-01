@@ -58,11 +58,18 @@ def add_user(username, password, name=""):
     return True, "Account created successfully!"
 
 def verify_user(username, password):
-    """Verify user credentials"""
+    """Verify user credentials (case-insensitive username)"""
     users = load_users()
-    if username in users:
+    # Find username case-insensitively
+    actual_username = None
+    for u in users.keys():
+        if u.lower() == username.lower():
+            actual_username = u
+            break
+    
+    if actual_username:
         hashed = hashlib.sha256(password.encode()).hexdigest()
-        return users[username]["password"] == hashed
+        return users[actual_username]["password"] == hashed
     return False
 
 def get_user_count():
