@@ -50,36 +50,114 @@ st.markdown("""
         50% { opacity: 1; }
     }
     @keyframes logoPulse {
-        0%, 100% { transform: scale(1); filter: invert(1) drop-shadow(0 0 5px rgba(255,215,0,0.3)); }
-        50% { transform: scale(1.05); filter: invert(1) drop-shadow(0 0 15px rgba(255,215,0,0.6)); }
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+    }
+    @keyframes borderGlow {
+        0%, 100% { box-shadow: 0 0 5px #00d4ff, 0 0 10px rgba(0,212,255,0.3); }
+        50% { box-shadow: 0 0 15px #00d4ff, 0 0 25px rgba(0,212,255,0.5), 0 0 35px rgba(0,212,255,0.2); }
+    }
+    
+    /* TradingView Style Logo Container - Main Header */
+    .logo-container {
+        position: relative;
+        width: 85px;
+        height: 85px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #1a1a2e 0%, #0d1b2a 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        animation: borderGlow 3s ease-in-out infinite;
+    }
+    .logo-container::before {
+        content: '';
+        position: absolute;
+        top: -3px; left: -3px; right: -3px; bottom: -3px;
+        background: linear-gradient(135deg, #00d4ff, #7c3aed, #00ff88, #ffd700);
+        border-radius: 18px;
+        z-index: -1;
+        background-size: 300% 300%;
+        animation: gradientMove 4s ease infinite;
+    }
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .logo-container img {
+        height: 60px;
+        width: 60px;
+        object-fit: contain;
+        filter: invert(1) drop-shadow(0 0 8px rgba(255,215,0,0.5));
+        animation: logoPulse 3s ease-in-out infinite;
+    }
+    
+    /* Sidebar Logo - TradingView Style */
+    [data-testid="stSidebar"] .stImage {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    [data-testid="stSidebar"] .stImage img {
+        width: 50px !important;
+        height: 50px !important;
+        padding: 8px;
+        background: linear-gradient(135deg, #131722 0%, #1e222d 100%);
+        border-radius: 12px;
+        border: 2px solid #2962ff;
+        box-shadow: 0 4px 15px rgba(41, 98, 255, 0.3), inset 0 0 20px rgba(41, 98, 255, 0.1);
+        filter: invert(1);
+        transition: all 0.3s ease;
+    }
+    [data-testid="stSidebar"] .stImage img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(41, 98, 255, 0.5), inset 0 0 30px rgba(41, 98, 255, 0.2);
+        border-color: #00d4ff;
     }
     
     .main-header {
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
         padding: 25px 30px;
-        border-radius: 15px;
+        border-radius: 20px;
         margin-bottom: 25px;
-        border-left: 5px solid #00d4ff;
-        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15), inset 0 0 60px rgba(0, 212, 255, 0.05);
     }
-    .main-header h1 { color: #ffffff; font-size: 2em; margin: 0; font-weight: 700; }
+    .main-header h1 { 
+        color: #ffffff; 
+        font-size: 2.2em; 
+        margin: 0; 
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 10px rgba(0,212,255,0.3);
+    }
     .main-header .arabic { 
-        font-size: 1.4em; 
+        font-size: 1.5em; 
         color: #ffd700; 
         font-family: 'Traditional Arabic', serif;
         direction: rtl;
-        margin: 10px 0;
+        margin: 12px 0;
         animation: glow 3s ease-in-out infinite;
     }
     .main-header .tagline { 
         color: #a0c4e8; 
-        margin: 5px 0 0 0; 
-        font-size: 0.95em;
+        margin: 8px 0 0 0; 
+        font-size: 1em;
         animation: fadeText 4s ease-in-out infinite;
+        letter-spacing: 0.5px;
     }
-    .main-header .tagline .highlight { color: #7ee787; }
+    .main-header .tagline .highlight { 
+        color: #00ff88; 
+        font-weight: 600;
+    }
     
-    [data-testid="stSidebar"] { background-color: #161b22; }
+    [data-testid="stSidebar"] { 
+        background: linear-gradient(180deg, #131722 0%, #1e222d 100%);
+        border-right: 1px solid rgba(41, 98, 255, 0.3);
+    }
     
     .metric-card {
         background: #1e2530;
@@ -112,11 +190,13 @@ st.markdown("""
     
     .mode-tag {
         display: inline-block;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 0.85em;
-        font-weight: 600;
+        padding: 8px 18px;
+        border-radius: 25px;
+        font-size: 0.9em;
+        font-weight: 700;
         margin: 5px 5px 5px 0;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     .mode-sweep { background: linear-gradient(90deg, #00d4ff, #0099cc); color: #000; }
     .mode-fp { background: linear-gradient(90deg, #00ff88, #00cc6a); color: #000; }
@@ -134,8 +214,10 @@ def get_logo_base64():
 logo_b64 = get_logo_base64()
 if logo_b64:
     st.markdown(f"""
-    <div class="main-header" style="display: flex; align-items: center; gap: 25px;">
-        <img src="data:image/png;base64,{logo_b64}" style="height: 80px; animation: logoPulse 3s ease-in-out infinite;">
+    <div class="main-header" style="display: flex; align-items: center; gap: 30px;">
+        <div class="logo-container">
+            <img src="data:image/png;base64,{logo_b64}">
+        </div>
         <div>
             <h1>TAWAQQUL SCANNER</h1>
             <p class="arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
