@@ -20,6 +20,9 @@ import json
 # ========== USER DATABASE FILE ==========
 USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 
+# Admin username - ONLY THIS USER CAN ACCESS ADMIN PANEL
+ADMIN_USERNAME = "admin"
+
 # Default admin user
 DEFAULT_USERS = {
     "admin": {"password": hashlib.sha256("admin123".encode()).hexdigest(), "name": "Admin", "created": "2024-01-01"},
@@ -65,6 +68,34 @@ def verify_user(username, password):
 def get_user_count():
     """Get total registered users"""
     return len(load_users())
+
+def delete_user(username):
+    """Delete a user (admin only)"""
+    if username == ADMIN_USERNAME:
+        return False, "Cannot delete admin!"
+    users = load_users()
+    if username in users:
+        del users[username]
+        save_users(users)
+        return True, f"User '{username}' deleted!"
+    return False, "User not found!"
+
+def get_all_users():
+    """Get all users for admin panel"""
+    users = load_users()
+    user_list = []
+    for username, data in users.items():
+        user_list.append({
+            "username": username,
+            "name": data.get("name", username),
+            "created": data.get("created", "Unknown"),
+            "is_admin": username == ADMIN_USERNAME
+        })
+    return user_list
+
+def is_admin():
+    """Check if current user is admin"""
+    return st.session_state.get('username', '').lower() == ADMIN_USERNAME.lower()
 
 # Load favicon
 favicon_path = os.path.join(os.path.dirname(__file__), "logo.png")
@@ -232,11 +263,48 @@ def show_login_page():
 def show_logout_button():
     with st.sidebar:
         st.markdown(f"**👤 Welcome, {st.session_state.get('username', 'User')}!**")
+        if is_admin():
+            st.markdown("🔑 **Admin Access**")
         if st.button("🚪 Logout", use_container_width=True):
             st.session_state['authenticated'] = False
             st.session_state['username'] = None
             st.rerun()
         st.markdown("---")
+
+# ========== ADMIN PANEL (Only for Admin) ==========
+def show_admin_panel():
+    """Admin panel - only visible to admin user"""
+    if not is_admin():
+        return
+    
+    with st.sidebar:
+        with st.expander("🛡️ ADMIN PANEL", expanded=False):
+            st.markdown("### 👥 User Management")
+            
+            users = get_all_users()
+            st.metric("Total Users", len(users))
+            
+            st.markdown("---")
+            st.markdown("**Registered Users:**")
+            
+            for user in users:
+                col1, col2 = st.columns([3, 1])
+                with col1:
+                    badge = "👑" if user['is_admin'] else "👤"
+                    st.markdown(f"{badge} **{user['username']}**")
+                    st.caption(f"📅 {user['created']}")
+                with col2:
+                    if not user['is_admin']:
+                        if st.button("🗑️", key=f"del_{user['username']}", help=f"Delete {user['username']}"):
+                            success, msg = delete_user(user['username'])
+                            if success:
+                                st.success(msg)
+                                st.rerun()
+                            else:
+                                st.error(msg)
+            
+            st.markdown("---")
+            st.caption("🔒 Only admin can see this panel")
 
 # ========== CHECK AUTHENTICATION ==========
 if 'authenticated' not in st.session_state:
@@ -248,6 +316,9 @@ if not st.session_state['authenticated']:
 
 # ========== SHOW LOGOUT IN SIDEBAR ==========
 show_logout_button()
+
+# ========== SHOW ADMIN PANEL (Only for Admin) ==========
+show_admin_panel()
 
 # ========== SETTINGS ==========
 PERIOD = "6mo"
