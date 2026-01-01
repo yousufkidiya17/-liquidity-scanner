@@ -109,59 +109,37 @@ st.markdown("""
         50% { box-shadow: 0 0 15px #00d4ff, 0 0 25px rgba(0,212,255,0.5), 0 0 35px rgba(0,212,255,0.2); }
     }
     
-    /* TradingView Style Logo Container - Main Header */
+    /* Simple Logo Container - Main Header */
     .logo-container {
-        position: relative;
-        width: 90px;
-        height: 90px;
-        border-radius: 18px;
-        background: linear-gradient(145deg, #131722 0%, #1e222d 100%);
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        background: #000000;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 3px solid #2962ff;
-        box-shadow: 0 0 20px rgba(41, 98, 255, 0.4), 
-                    0 0 40px rgba(41, 98, 255, 0.2),
-                    inset 0 0 30px rgba(41, 98, 255, 0.1);
-        overflow: hidden;
-    }
-    .logo-container::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(135deg, rgba(41,98,255,0.1) 0%, transparent 50%, rgba(0,212,255,0.1) 100%);
-        border-radius: 15px;
+        padding: 10px;
     }
     .logo-container img {
-        height: 55px;
-        width: 55px;
+        height: 60px;
+        width: 60px;
         object-fit: contain;
-        filter: invert(1) brightness(1.1);
-        position: relative;
-        z-index: 1;
+        filter: invert(1);
     }
     
-    /* Sidebar Logo - TradingView Style */
+    /* Sidebar Logo - Simple Style */
     [data-testid="stSidebar"] .stImage {
         display: flex;
         justify-content: center;
         margin-bottom: 15px;
     }
     [data-testid="stSidebar"] .stImage img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 45px !important;
+        height: 45px !important;
         padding: 8px;
-        background: linear-gradient(135deg, #131722 0%, #1e222d 100%);
-        border-radius: 12px;
-        border: 2px solid #2962ff;
-        box-shadow: 0 4px 15px rgba(41, 98, 255, 0.3), inset 0 0 20px rgba(41, 98, 255, 0.1);
+        background: #000000;
+        border-radius: 10px;
         filter: invert(1);
-        transition: all 0.3s ease;
-    }
-    [data-testid="stSidebar"] .stImage img:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 25px rgba(41, 98, 255, 0.5), inset 0 0 30px rgba(41, 98, 255, 0.2);
-        border-color: #00d4ff;
     }
     
     .main-header {
